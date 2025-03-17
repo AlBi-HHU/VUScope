@@ -1,0 +1,13 @@
+output_dir: output # directory name where the output of the 3D and 2D workflows are stored
+
+image_file_ext: pdf # file extension for plots used by the 3D and 2D workflows
+
+start_time_incucyte: 6 # start time used in "configfiles/config.yaml"
+start_time_celltiterglo: 0 # start time used in "configfiles/config_2D.yaml"
+
+intermediate_inhibition_time: 72 # a time in times that appears in both "configfiles/config.yaml" and "configfiles/config_2D.yaml" that is less than the maximal inhibition time
+max_inhibition_time: 120 # the maximal inhibition time
+
+daily: [False, True] # whether to get result files for output that was fit using all datapoints (False) or only datapoints in 24h-intervals
+
+grayscale: True # True: gray plots without background, False: colored plots with background

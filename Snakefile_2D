@@ -1,0 +1,83 @@
+import os
+
+configfile:
+    "configfiles/config_2D.yaml"
+
+data_dir = config["data_dir"]
+output_dir = config["output_dir"]
+image_file_ext = config["image_file_ext"]
+metric = config["metric"]
+start_time = config["start_time"]
+extrapolate_until_time = config["extrapolate_until_time"]
+times = config["times"]
+input_files = os.listdir(data_dir)
+
+def aggregate_fit_curve_results(wildcards):
+    checkpoints.preprocessing.get(**wildcards)
+    sample, = glob_wildcards(f"{output_dir}/start_time{start_time}h/separate_files/{{sample}}.csv")
+    return expand(f"{output_dir}/start_time{start_time}h/2D/tmp/auc/{{sample}}.csv", sample=sample)
+
+def aggregate_plot_curve(wildcards):
+    checkpoints.preprocessing.get(**wildcards)
+    sample, = glob_wildcards(f"{output_dir}/start_time{start_time}h/separate_files/{{sample}}.csv")
+    return expand(f"{output_dir}/start_time{start_time}h/2D/plots/{{sample}}.{image_file_ext}", sample=sample)
+
+rule all:
+    input:
+        aggregate_plot_curve,
+        f"{output_dir}/start_time{start_time}h/2D/fit_curve_results.csv"
+
+# Preprocessing
+
+checkpoint preprocessing:
+    input:
+        expand(f"{{data_dir}}/{{input_file}}", data_dir=data_dir, input_file=input_files)
+    conda:
+        "env.yaml"
+    output:
+        directory(f"{output_dir}/start_time{start_time}h/separate_files")
+    script:
+        "scripts/scripts_2D/preprocessing_celltiterglo.py"
+
+# 2D Curve Rules
+
+rule fit_curve:
+    input:
+        f"{output_dir}/start_time{start_time}h/separate_files/{{sample}}.csv"
+    conda:
+        "env.yaml"
+    output:
+        f"{output_dir}/start_time{start_time}h/2D/tmp/fit_curve/{{sample}}_time{{time}}.csv"
+    script:
+        "scripts/scripts_2D/fit_curve.py"
+
+rule merge_fit_curve_files:
+    input:
+        aggregate_fit_curve_results
+    conda:
+        "env.yaml"
+    output:
+        f"{output_dir}/start_time{start_time}h/2D/fit_curve_results.csv"
+    script:
+        "scripts/merge_files.py"
+
+rule calculate_auc:
+    input:
+        expand(f"{output_dir}/start_time{start_time}h/2D/tmp/fit_curve/{{sample}}_time{{time}}.csv", time=times, allow_missing=True)
+    conda:
+        "env.yaml"
+    output:
+        f"{output_dir}/start_time{start_time}h/2D/tmp/auc/{{sample}}.csv"
+    script:
+        "scripts/scripts_2D/calculate_auc.py"
+
+rule plot_curve:
+    input:
+        f"{output_dir}/start_time{start_time}h/separate_files/{{sample}}.csv",
+        expand(f"{output_dir}/start_time{start_time}h/2D/tmp/fit_curve/{{sample}}_time{{time}}.csv", time=times, allow_missing=True)
+    output:
+        f"{output_dir}/start_time{start_time}h/2D/plots/{{sample}}.{image_file_ext}"
+    conda:
+        "env.yaml"
+    script:
+        "scripts/scripts_2D/plot_curve.py"
