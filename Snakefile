@@ -11,7 +11,7 @@ start_time = config["start_time"]
 extrapolate_until_time = config["extrapolate_until_time"]
 times = config["times"]
 daily = config["daily"]
-input_files = os.listdir(data_dir)
+input_files = [f for f in os.listdir(data_dir) if not f.startswith(".")]
 
 def aggregate_fit_surface_results(wildcards):
     checkpoints.preprocessing.get(**wildcards)
