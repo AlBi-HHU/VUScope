@@ -81,7 +81,7 @@ df_merged = df_merged.rename(columns={
 df_merged = df_merged[["cell_line", "drug", "dose", "time", "norm_cell_count"]]
 df_merged = df_merged.sort_values(by=["cell_line", "drug", "dose", "time"])
 
-output_path = f"{output_dir}/start_time{start_time}h/separate_files"
+output_path = f"{output_dir}/start_time{start_time}h/separate_files_3D"
 if not os.path.exists(output_path):
     os.makedirs(output_path)
 
