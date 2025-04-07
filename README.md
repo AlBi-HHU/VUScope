@@ -2,8 +2,9 @@
 This repository contains the Snakemake pipelines for "VUScope: a mathematical model for evaluating image-based drug response measurements and predicting long-term incubation outcomes".
 
 ## Installation
-Install Miniconda. Clone/Download this repository. Follow the instructions on the [Snakemake installation guide](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html) to install a Snakemake environment in conda.
-We used Snakemake version 7.25.0. The versions of the packages are listed in env.yaml.
+- Clone/Download this repository.
+- Install Miniconda.
+- Follow the instructions on the [Snakemake installation guide](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html) to install a Snakemake environment in conda. (We used Snakemake version 7.25.0. The versions of the packages are listed in env.yaml.)
 
 ## Data
 Example data is given in `input`. For the 3D fits, use files formatted like the files in `data` and `protocols` (should be more or less the default output format of Incucyte, but non-Incucyte data could also be formatted like this to be processed). For the 2D fits, use files formatted like the files in `data_celltiterglo`.
