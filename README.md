@@ -26,13 +26,19 @@ For the 2D workflow: Prepare the configuration file `configfiles/config_2D.yaml`
 ```bash
 snakemake --cores all --use-conda -s Snakefile_2D
 ```
-and add `--conda-frontend conda` as above if needed.
+or, if mamba causes problems, add the `--conda-frontend conda` flag:
+```bash
+snakemake --cores all --use-conda --conda-frontend conda -s Snakefile_2D
+```
 
 After running the 3D and 2D workflows, you can get additional result plots and files: Prepare the configuration file `configfiles/config_results.yaml` (see the "Configuration Files" section below). Open the terminal. Navigate to the cloned/downloaded git repo directory. Run:
 ```bash
 snakemake --cores all --use-conda -s Snakefile_results
 ```
-and add `--conda-frontend conda` as above if needed.
+or, if mamba causes problems, add the `--conda-frontend conda` flag:
+```bash
+snakemake --cores all --use-conda --conda-frontend conda -s Snakefile_results
+```
 
 ## Configuration Files
 `configfiles/config.yaml` has the following configurations:
