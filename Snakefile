@@ -15,12 +15,12 @@ input_files = [f for f in os.listdir(data_dir) if not f.startswith(".")]
 
 def aggregate_fit_surface_results(wildcards):
     checkpoints.preprocessing.get(**wildcards)
-    sample, = glob_wildcards(f"{output_dir}/start_time{start_time}h/separate_files/{{sample}}.csv")
+    sample, = glob_wildcards(f"{output_dir}/start_time{start_time}h/separate_files_3D/{{sample}}.csv")
     return expand(f"{output_dir}/start_time{start_time}h/3D/extrapolate_until_{extrapolate_until_time}h/tmp/vus/{{sample}}_daily{{daily}}.csv", sample=sample, daily=daily)
 
 def aggregate_plot_surface(wildcards):
     checkpoints.preprocessing.get(**wildcards)
-    sample, = glob_wildcards(f"{output_dir}/start_time{start_time}h/separate_files/{{sample}}.csv")
+    sample, = glob_wildcards(f"{output_dir}/start_time{start_time}h/separate_files_3D/{{sample}}.csv")
     return expand(f"{output_dir}/start_time{start_time}h/3D/extrapolate_until_{extrapolate_until_time}h/plots/{{sample}}_time{{time}}_daily{{daily}}.{image_file_ext}", sample=sample, time=times, daily=daily)
 
 rule all:
@@ -37,7 +37,7 @@ checkpoint preprocessing:
     conda:
         "env.yaml"
     output:
-        directory(f"{output_dir}/start_time{start_time}h/separate_files")
+        directory(f"{output_dir}/start_time{start_time}h/separate_files_3D")
     script:
         "scripts/preprocessing.py"
 
@@ -45,7 +45,7 @@ checkpoint preprocessing:
 
 rule fit_surface:
     input:
-        f"{output_dir}/start_time{start_time}h/separate_files/{{sample}}.csv"
+        f"{output_dir}/start_time{start_time}h/separate_files_3D/{{sample}}.csv"
     conda:
         "env.yaml"
     output:
@@ -65,7 +65,7 @@ rule calculate_vus:
 
 rule plot_surface:
     input:
-        f"{output_dir}/start_time{start_time}h/separate_files/{{sample}}.csv",
+        f"{output_dir}/start_time{start_time}h/separate_files_3D/{{sample}}.csv",
         expand(f"{output_dir}/start_time{start_time}h/3D/extrapolate_until_{extrapolate_until_time}h/tmp/fit_surface/{{sample}}_time{{time}}_daily{{daily}}.csv", time=times, daily=daily, allow_missing=True)
     output:
         expand(f"{output_dir}/start_time{start_time}h/3D/extrapolate_until_{extrapolate_until_time}h/plots/{{sample}}_time{{time}}_daily{{daily}}.{image_file_ext}", time=times, daily=daily, allow_missing=True)
