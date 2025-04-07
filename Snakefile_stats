@@ -2,7 +2,7 @@ import os
 import itertools
 
 configfile:
-    "configfiles/config_results.yaml"
+    "configfiles/config_stats.yaml"
 
 output_dir = config["output_dir"]
 image_file_ext = config["image_file_ext"]
@@ -43,7 +43,7 @@ rule norm_cell_count_distribution:
     output:
         f"results/norm_cell_count_distribution.{image_file_ext}"
     script:
-        "scripts/scripts_results/norm_cell_count_distribution.py"
+        "scripts/scripts_stats/norm_cell_count_distribution.py"
 
 rule trend_plot:
     input:
@@ -53,7 +53,7 @@ rule trend_plot:
     output:
         f"results/{path_incucyte}/trend_plot_{intermediate_inhibition_time}_daily_{{daily}}_{max_inhibition_time}.{image_file_ext}"
     script:
-        "scripts/scripts_results/trend_plot.py"
+        "scripts/scripts_stats/trend_plot.py"
 
 rule correlations_and_mapes_vus:
     input:
@@ -67,7 +67,7 @@ rule correlations_and_mapes_vus:
         f"results/{path_incucyte}/ccc_norm_vus_{{time_x}}_daily_{{daily_x}}_{{time_y}}_daily_{{daily_y}}.{image_file_ext}",
         f"results/{path_incucyte}/correlations_and_mapes_vus_{{time_x}}_daily_{{daily_x}}_{{time_y}}_daily_{{daily_y}}.txt"
     script:
-        "scripts/scripts_results/correlations_and_mapes_vus.py"
+        "scripts/scripts_stats/correlations_and_mapes_vus.py"
 
 rule merge_vus_txt_files:
     input:
@@ -77,7 +77,7 @@ rule merge_vus_txt_files:
     output:
         f"results/{path_incucyte}/correlations_and_mapes_vus_{intermediate_inhibition_time}_{max_inhibition_time}.txt"
     script:
-        "scripts/scripts_results/merge_txt_files.py"
+        "scripts/scripts_stats/merge_txt_files.py"
 
 rule correlations_and_mapes_auc:
     input:
@@ -90,7 +90,7 @@ rule correlations_and_mapes_auc:
         f"results/{path_incucyte}_{path_celltiterglo}/ccc_norm_auc_incucyte_time_{{time_x}}_daily_{{daily_x}}_celltiterglo_time_{{time_y}}.{image_file_ext}",
         f"results/{path_incucyte}_{path_celltiterglo}/correlations_and_mapes_auc_{{time_x}}_daily_{{daily_x}}_{{time_y}}.txt"
     script:
-        "scripts/scripts_results/correlations_and_mapes_auc.py"
+        "scripts/scripts_stats/correlations_and_mapes_auc.py"
 
 rule merge_auc_txt_files:
     input:
@@ -100,4 +100,4 @@ rule merge_auc_txt_files:
     output:
         f"results/{path_incucyte}_{path_celltiterglo}/correlations_and_mapes_auc_{intermediate_inhibition_time}_{max_inhibition_time}.txt"
     script:
-        "scripts/scripts_results/merge_txt_files.py"
+        "scripts/scripts_stats/merge_txt_files.py"

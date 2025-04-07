@@ -28,16 +28,16 @@ snakemake --cores all --use-conda -s Snakefile_2D
 ```
 or, if mamba causes problems, add the `--conda-frontend conda` flag:
 ```bash
-snakemake --cores all --use-conda --conda-frontend conda -s Snakefile_2D
+snakemake --cores all --use-conda -s Snakefile_2D --conda-frontend conda
 ```
 
-After running the 3D and 2D workflows, you can get additional result plots and files: Prepare the configuration file `configfiles/config_results.yaml` (see the "Configuration Files" section below). Open the terminal. Navigate to the cloned/downloaded git repo directory. Run:
+After running the 3D and 2D workflows, you can get additional statistical comparison plots and files: Prepare the configuration file `configfiles/config_stats.yaml` (see the "Configuration Files" section below). Open the terminal. Navigate to the cloned/downloaded git repo directory. Run:
 ```bash
-snakemake --cores all --use-conda -s Snakefile_results
+snakemake --cores all --use-conda -s Snakefile_stats
 ```
 or, if mamba causes problems, add the `--conda-frontend conda` flag:
 ```bash
-snakemake --cores all --use-conda --conda-frontend conda -s Snakefile_results
+snakemake --cores all --use-conda -s Snakefile_stats --conda-frontend conda
 ```
 
 ## Configuration Files
@@ -71,7 +71,7 @@ extrapolate_until_time: 120 # for any time in the list below named times, predic
 times: [72, 120] # fit the data for datapoints at each time in this list; any time greater than the maximal inhibition time is treated as the maximal inhibition time
 ```
 
-`configfiles/config_results.yaml` has the following configurations:
+`configfiles/config_stats.yaml` has the following configurations:
 ```yaml
 output_dir: output # directory name where the output of the 3D and 2D workflows are stored
 
@@ -107,9 +107,9 @@ Main 3D workflow:
 - `scripts_2D/plot_curve.py`: Plots the dose-response curve.
 - `merge_files.py`: See main 3D workflow.
 
-Results workflow:
-- `scripts_results/norm_cell_count_distribution.py`: Plots the distribution of normalized cell counts. This plot is not in the manuscript and only helps to see the range of values to get a feeling whether a certain metric value is good or bad (e.g., whether an RMSE of 0.4 is actually good (if the range of values is large, for example between 0 and 15) or bad (if the range of values is between 0 and 1)).
-- `scripts_results/trend_plot.py`: Plots the trend whether more incubation time is predicted to improve drug efficacy or actually improves drug efficacy, see the manuscript.
-- `scripts_results/correlations_and_mapes_vus.py`: Plots and lists the Pearson and concordance correlation coefficients and mean absolute percentage errors of the VUS values.
-- `scripts_results/correlations_and_mapes_auc.py`: Plots and lists the Pearson and concordance correlation coefficients and mean absolute percentage errors of the AUC values.
-- `scripts_results/merge_txt_files.py`: Similar to `merge_files.py`.
+Statistical comparison workflow:
+- `scripts_stats/norm_cell_count_distribution.py`: Plots the distribution of normalized cell counts. This plot is not in the manuscript and only helps to see the range of values to get a feeling whether a certain metric value is good or bad (e.g., whether an RMSE of 0.4 is actually good (if the range of values is large, for example between 0 and 15) or bad (if the range of values is between 0 and 1)).
+- `scripts_stats/trend_plot.py`: Plots the trend whether more incubation time is predicted to improve drug efficacy or actually improves drug efficacy, see the manuscript.
+- `scripts_stats/correlations_and_mapes_vus.py`: Plots and lists the Pearson and concordance correlation coefficients and mean absolute percentage errors of the VUS values.
+- `scripts_stats/correlations_and_mapes_auc.py`: Plots and lists the Pearson and concordance correlation coefficients and mean absolute percentage errors of the AUC values.
+- `scripts_stats/merge_txt_files.py`: Similar to `merge_files.py`.
