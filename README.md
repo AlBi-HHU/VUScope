@@ -14,23 +14,23 @@ Activate the Snakemake environment in conda with the command `conda activate sna
 
 For the main 3D workflow: Prepare the configuration file `configfiles/config.yaml` (see the "Configuration Files" section below). Open the terminal. Navigate to the cloned/downloaded git repo directory. Run:
 ```bash
-snakemake --cores X --use-conda
+snakemake --cores all --use-conda
 ```
 or, if mamba causes problems, add the `--conda-frontend conda` flag:
 ```bash
-snakemake --cores X --use-conda --conda-frontend conda
+snakemake --cores all --use-conda --conda-frontend conda
 ```
-`X` is the number of cores you wish to use. You need to use at least `X=1`. Using multiple cores will parallelize the process. If `X` is greater than the number of cores on your machine, Snakemake will automatically set `X` to the number of cores on your machine. You can set `X=all` to use all your cores. Using the maximum number of cores on your machine means you will likely not be able to use the machine for anything else until the pipeline finished its run. Note: There may appear warnings if overflows occur during calculations, but they can be safely ignored.
+Instead of `--cores all`, you can also specify the number of cores you want to use, e.g., `--cores 2`. Note: There may appear warnings if overflows occur during calculations, but they can be safely ignored.
 
 For the 2D workflow: Prepare the configuration file `configfiles/config_2D.yaml` (see the "Configuration Files" section below). Open the terminal. Navigate to the cloned/downloaded git repo directory. Run:
 ```bash
-snakemake --cores X --use-conda -s Snakefile_2D
+snakemake --cores all --use-conda -s Snakefile_2D
 ```
 and add `--conda-frontend conda` as above if needed.
 
 After running the 3D and 2D workflows, you can get additional result plots and files: Prepare the configuration file `configfiles/config_results.yaml` (see the "Configuration Files" section below). Open the terminal. Navigate to the cloned/downloaded git repo directory. Run:
 ```bash
-snakemake --cores X --use-conda -s Snakefile_results
+snakemake --cores all --use-conda -s Snakefile_results
 ```
 and add `--conda-frontend conda` as above if needed.
 
