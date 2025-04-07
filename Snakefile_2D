@@ -10,7 +10,7 @@ metric = config["metric"]
 start_time = config["start_time"]
 extrapolate_until_time = config["extrapolate_until_time"]
 times = config["times"]
-input_files = os.listdir(data_dir)
+input_files = [f for f in os.listdir(data_dir) if not f.startswith(".")]
 
 def aggregate_fit_curve_results(wildcards):
     checkpoints.preprocessing.get(**wildcards)
