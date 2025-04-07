@@ -2,12 +2,7 @@
 This repository contains the Snakemake pipelines for "VUScope: a mathematical model for evaluating image-based drug response measurements and predicting long-term incubation outcomes".
 
 ## Installation
-Install Miniconda. Clone this repository. Open the terminal. Navigate to the git repository directory. Install the environment of the env.yaml file:
-```bash
-cd path/to/repo/
-conda env create -f env.yaml
-```
-Follow the instructions on the [Snakemake installation guide](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html) to install a Snakemake environment in conda.
+Install Miniconda. Clone/Download this repository. Follow the instructions on the [Snakemake installation guide](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html) to install a Snakemake environment in conda.
 We used Snakemake version 7.25.0. The versions of the packages are listed in env.yaml.
 
 ## Data
@@ -16,18 +11,18 @@ Example data is given in `input`. For the 3D fits, use files formatted like the 
 ## Execution
 Activate the Snakemake environment in conda with the command `conda activate snakemake`.
 
-For the main 3D workflow: Prepare the configuration file `configfiles/config.yaml` (see the "Configuration Files" section below). Open the terminal. Navigate to the git repo directory. Run:
+For the main 3D workflow: Prepare the configuration file `configfiles/config.yaml` (see the "Configuration Files" section below). Open the terminal. Navigate to the cloned/downloaded git repo directory. Run:
 ```bash
 snakemake --cores X --use-conda
 ```
 `X` is the number of cores you wish to use. You need to use at least `X=1`. Using multiple cores will parallelize the process. If `X` is greater than the number of cores on your machine, Snakemake will automatically set `X` to the number of cores on your machine. You can set `X=all` to use all your cores. Using the maximum number of cores on your machine means you will likely not be able to use the machine for anything else until the pipeline finished its run. Note: There may appear warnings if overflows occur during calculations, but they can be safely ignored.
 
-For the 2D workflow: Prepare the configuration file `configfiles/config_2D.yaml` (see the "Configuration Files" section below). Open the terminal. Navigate to the git repo directory. Run:
+For the 2D workflow: Prepare the configuration file `configfiles/config_2D.yaml` (see the "Configuration Files" section below). Open the terminal. Navigate to the cloned/downloaded git repo directory. Run:
 ```bash
 snakemake --cores X --use-conda -s Snakefile_2D
 ```
 
-After running the 3D and 2D workflows, you can get additional result plots and files: Prepare the configuration file `configfiles/config_results.yaml` (see the "Configuration Files" section below). Open the terminal. Navigate to the git repo directory. Run:
+After running the 3D and 2D workflows, you can get additional result plots and files: Prepare the configuration file `configfiles/config_results.yaml` (see the "Configuration Files" section below). Open the terminal. Navigate to the cloned/downloaded git repo directory. Run:
 ```bash
 snakemake --cores X --use-conda -s Snakefile_results
 ```
