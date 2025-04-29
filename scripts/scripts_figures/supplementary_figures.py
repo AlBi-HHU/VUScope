@@ -29,7 +29,7 @@ y2 = utils.dose_response_model(params, x2)
 # AUC normalization
 fig = go.Figure()
 fig.update_layout(
-    xaxis_title="Doses (" + u"\u03bc" + "M)",
+    xaxis_title="Dose (" + u"\u03bc" + "M)",
     yaxis_title="Normalized cell count",
     xaxis = dict(
         tickmode = "array",
