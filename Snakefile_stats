@@ -47,7 +47,7 @@ rule norm_cell_count_distribution:
 
 rule trend_plot:
     input:
-        f"{output_dir}/start_time{start_time_incucyte}h/3D/extrapolate_until_{max_inhibition_time}h/fit_surface_stats.csv"
+        f"{output_dir}/start_time{start_time_incucyte}h/3D/extrapolate_until_{max_inhibition_time}h/fit_surface_results.csv"
     conda:
         "env.yaml"
     output:
@@ -57,7 +57,7 @@ rule trend_plot:
 
 rule correlations_and_mapes_vus:
     input:
-        f"{output_dir}/start_time{start_time_incucyte}h/3D/extrapolate_until_{max_inhibition_time}h/fit_surface_stats.csv"
+        f"{output_dir}/start_time{start_time_incucyte}h/3D/extrapolate_until_{max_inhibition_time}h/fit_surface_results.csv"
     conda:
         "env.yaml"
     output:
@@ -81,8 +81,8 @@ rule merge_vus_txt_files:
 
 rule correlations_and_mapes_auc:
     input:
-        f"{output_dir}/start_time{start_time_incucyte}h/3D/extrapolate_until_{max_inhibition_time}h/fit_surface_stats.csv",
-        f"{output_dir}/start_time{start_time_celltiterglo}h/2D/fit_curve_stats.csv"
+        f"{output_dir}/start_time{start_time_incucyte}h/3D/extrapolate_until_{max_inhibition_time}h/fit_surface_results.csv",
+        f"{output_dir}/start_time{start_time_celltiterglo}h/2D/fit_curve_results.csv"
     conda:
         "env.yaml"
     output:
