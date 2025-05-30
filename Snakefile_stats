@@ -26,78 +26,78 @@ incucyte_celltiterglo_correlation_pairs = get_incucyte_celltiterglo_correlation_
 
 rule all:
     input:
-        f"results/norm_cell_count_distribution.{image_file_ext}",
-        expand(f"results/{path_incucyte}/trend_plot_{intermediate_inhibition_time}_daily_{{daily}}_{max_inhibition_time}.{image_file_ext}", daily=daily),
-        expand(f"results/{path_incucyte}/pcc_vus_{{pair[0][0]}}_daily_{{pair[0][1]}}_{{pair[1][0]}}_daily_{{pair[1][1]}}.{image_file_ext}", pair=incucyte_correlation_pairs),
-        expand(f"results/{path_incucyte}/pcc_norm_vus_{{pair[0][0]}}_daily_{{pair[0][1]}}_{{pair[1][0]}}_daily_{{pair[1][1]}}.{image_file_ext}", pair=incucyte_correlation_pairs),
-        expand(f"results/{path_incucyte}/ccc_vus_{{pair[0][0]}}_daily_{{pair[0][1]}}_{{pair[1][0]}}_daily_{{pair[1][1]}}.{image_file_ext}", pair=incucyte_correlation_pairs),
-        expand(f"results/{path_incucyte}/ccc_norm_vus_{{pair[0][0]}}_daily_{{pair[0][1]}}_{{pair[1][0]}}_daily_{{pair[1][1]}}.{image_file_ext}", pair=incucyte_correlation_pairs),
-        f"results/{path_incucyte}/correlations_and_mapes_vus_{intermediate_inhibition_time}_{max_inhibition_time}.txt",
-        expand(f"results/{path_incucyte}_{path_celltiterglo}/pcc_norm_auc_incucyte_time_{{pair[0]}}_daily_{{pair[1]}}_celltiterglo_time_{{pair[2]}}.{image_file_ext}", pair=incucyte_celltiterglo_correlation_pairs),
-        expand(f"results/{path_incucyte}_{path_celltiterglo}/ccc_norm_auc_incucyte_time_{{pair[0]}}_daily_{{pair[1]}}_celltiterglo_time_{{pair[2]}}.{image_file_ext}", pair=incucyte_celltiterglo_correlation_pairs),
-        f"results/{path_incucyte}_{path_celltiterglo}/correlations_and_mapes_auc_{intermediate_inhibition_time}_{max_inhibition_time}.txt"
+        f"stats/norm_cell_count_distribution.{image_file_ext}",
+        expand(f"stats/{path_incucyte}/trend_plot_{intermediate_inhibition_time}_daily_{{daily}}_{max_inhibition_time}.{image_file_ext}", daily=daily),
+        expand(f"stats/{path_incucyte}/pcc_vus_{{pair[0][0]}}_daily_{{pair[0][1]}}_{{pair[1][0]}}_daily_{{pair[1][1]}}.{image_file_ext}", pair=incucyte_correlation_pairs),
+        expand(f"stats/{path_incucyte}/pcc_norm_vus_{{pair[0][0]}}_daily_{{pair[0][1]}}_{{pair[1][0]}}_daily_{{pair[1][1]}}.{image_file_ext}", pair=incucyte_correlation_pairs),
+        expand(f"stats/{path_incucyte}/ccc_vus_{{pair[0][0]}}_daily_{{pair[0][1]}}_{{pair[1][0]}}_daily_{{pair[1][1]}}.{image_file_ext}", pair=incucyte_correlation_pairs),
+        expand(f"stats/{path_incucyte}/ccc_norm_vus_{{pair[0][0]}}_daily_{{pair[0][1]}}_{{pair[1][0]}}_daily_{{pair[1][1]}}.{image_file_ext}", pair=incucyte_correlation_pairs),
+        f"stats/{path_incucyte}/correlations_and_mapes_vus_{intermediate_inhibition_time}_{max_inhibition_time}.txt",
+        expand(f"stats/{path_incucyte}_{path_celltiterglo}/pcc_norm_auc_incucyte_time_{{pair[0]}}_daily_{{pair[1]}}_celltiterglo_time_{{pair[2]}}.{image_file_ext}", pair=incucyte_celltiterglo_correlation_pairs),
+        expand(f"stats/{path_incucyte}_{path_celltiterglo}/ccc_norm_auc_incucyte_time_{{pair[0]}}_daily_{{pair[1]}}_celltiterglo_time_{{pair[2]}}.{image_file_ext}", pair=incucyte_celltiterglo_correlation_pairs),
+        f"stats/{path_incucyte}_{path_celltiterglo}/correlations_and_mapes_auc_{intermediate_inhibition_time}_{max_inhibition_time}.txt"
 
 rule norm_cell_count_distribution:
     conda:
         "env.yaml"
     output:
-        f"results/norm_cell_count_distribution.{image_file_ext}"
+        f"stats/norm_cell_count_distribution.{image_file_ext}"
     script:
         "scripts/scripts_stats/norm_cell_count_distribution.py"
 
 rule trend_plot:
     input:
-        f"{output_dir}/start_time{start_time_incucyte}h/3D/extrapolate_until_{max_inhibition_time}h/fit_surface_results.csv"
+        f"{output_dir}/start_time{start_time_incucyte}h/3D/extrapolate_until_{max_inhibition_time}h/fit_surface_stats.csv"
     conda:
         "env.yaml"
     output:
-        f"results/{path_incucyte}/trend_plot_{intermediate_inhibition_time}_daily_{{daily}}_{max_inhibition_time}.{image_file_ext}"
+        f"stats/{path_incucyte}/trend_plot_{intermediate_inhibition_time}_daily_{{daily}}_{max_inhibition_time}.{image_file_ext}"
     script:
         "scripts/scripts_stats/trend_plot.py"
 
 rule correlations_and_mapes_vus:
     input:
-        f"{output_dir}/start_time{start_time_incucyte}h/3D/extrapolate_until_{max_inhibition_time}h/fit_surface_results.csv"
+        f"{output_dir}/start_time{start_time_incucyte}h/3D/extrapolate_until_{max_inhibition_time}h/fit_surface_stats.csv"
     conda:
         "env.yaml"
     output:
-        f"results/{path_incucyte}/pcc_vus_{{time_x}}_daily_{{daily_x}}_{{time_y}}_daily_{{daily_y}}.{image_file_ext}",
-        f"results/{path_incucyte}/pcc_norm_vus_{{time_x}}_daily_{{daily_x}}_{{time_y}}_daily_{{daily_y}}.{image_file_ext}",
-        f"results/{path_incucyte}/ccc_vus_{{time_x}}_daily_{{daily_x}}_{{time_y}}_daily_{{daily_y}}.{image_file_ext}",
-        f"results/{path_incucyte}/ccc_norm_vus_{{time_x}}_daily_{{daily_x}}_{{time_y}}_daily_{{daily_y}}.{image_file_ext}",
-        f"results/{path_incucyte}/correlations_and_mapes_vus_{{time_x}}_daily_{{daily_x}}_{{time_y}}_daily_{{daily_y}}.txt"
+        f"stats/{path_incucyte}/pcc_vus_{{time_x}}_daily_{{daily_x}}_{{time_y}}_daily_{{daily_y}}.{image_file_ext}",
+        f"stats/{path_incucyte}/pcc_norm_vus_{{time_x}}_daily_{{daily_x}}_{{time_y}}_daily_{{daily_y}}.{image_file_ext}",
+        f"stats/{path_incucyte}/ccc_vus_{{time_x}}_daily_{{daily_x}}_{{time_y}}_daily_{{daily_y}}.{image_file_ext}",
+        f"stats/{path_incucyte}/ccc_norm_vus_{{time_x}}_daily_{{daily_x}}_{{time_y}}_daily_{{daily_y}}.{image_file_ext}",
+        f"stats/{path_incucyte}/correlations_and_mapes_vus_{{time_x}}_daily_{{daily_x}}_{{time_y}}_daily_{{daily_y}}.txt"
     script:
         "scripts/scripts_stats/correlations_and_mapes_vus.py"
 
 rule merge_vus_txt_files:
     input:
-        expand(f"results/{path_incucyte}/correlations_and_mapes_vus_{{pair[0][0]}}_daily_{{pair[0][1]}}_{{pair[1][0]}}_daily_{{pair[1][1]}}.txt", pair=incucyte_correlation_pairs)
+        expand(f"stats/{path_incucyte}/correlations_and_mapes_vus_{{pair[0][0]}}_daily_{{pair[0][1]}}_{{pair[1][0]}}_daily_{{pair[1][1]}}.txt", pair=incucyte_correlation_pairs)
     conda:
         "env.yaml"
     output:
-        f"results/{path_incucyte}/correlations_and_mapes_vus_{intermediate_inhibition_time}_{max_inhibition_time}.txt"
+        f"stats/{path_incucyte}/correlations_and_mapes_vus_{intermediate_inhibition_time}_{max_inhibition_time}.txt"
     script:
         "scripts/scripts_stats/merge_txt_files.py"
 
 rule correlations_and_mapes_auc:
     input:
-        f"{output_dir}/start_time{start_time_incucyte}h/3D/extrapolate_until_{max_inhibition_time}h/fit_surface_results.csv",
-        f"{output_dir}/start_time{start_time_celltiterglo}h/2D/fit_curve_results.csv"
+        f"{output_dir}/start_time{start_time_incucyte}h/3D/extrapolate_until_{max_inhibition_time}h/fit_surface_stats.csv",
+        f"{output_dir}/start_time{start_time_celltiterglo}h/2D/fit_curve_stats.csv"
     conda:
         "env.yaml"
     output:
-        f"results/{path_incucyte}_{path_celltiterglo}/pcc_norm_auc_incucyte_time_{{time_x}}_daily_{{daily_x}}_celltiterglo_time_{{time_y}}.{image_file_ext}",
-        f"results/{path_incucyte}_{path_celltiterglo}/ccc_norm_auc_incucyte_time_{{time_x}}_daily_{{daily_x}}_celltiterglo_time_{{time_y}}.{image_file_ext}",
-        f"results/{path_incucyte}_{path_celltiterglo}/correlations_and_mapes_auc_{{time_x}}_daily_{{daily_x}}_{{time_y}}.txt"
+        f"stats/{path_incucyte}_{path_celltiterglo}/pcc_norm_auc_incucyte_time_{{time_x}}_daily_{{daily_x}}_celltiterglo_time_{{time_y}}.{image_file_ext}",
+        f"stats/{path_incucyte}_{path_celltiterglo}/ccc_norm_auc_incucyte_time_{{time_x}}_daily_{{daily_x}}_celltiterglo_time_{{time_y}}.{image_file_ext}",
+        f"stats/{path_incucyte}_{path_celltiterglo}/correlations_and_mapes_auc_{{time_x}}_daily_{{daily_x}}_{{time_y}}.txt"
     script:
         "scripts/scripts_stats/correlations_and_mapes_auc.py"
 
 rule merge_auc_txt_files:
     input:
-        expand(f"results/{path_incucyte}_{path_celltiterglo}/correlations_and_mapes_auc_{{pair[0]}}_daily_{{pair[1]}}_{{pair[2]}}.txt", pair=incucyte_celltiterglo_correlation_pairs)
+        expand(f"stats/{path_incucyte}_{path_celltiterglo}/correlations_and_mapes_auc_{{pair[0]}}_daily_{{pair[1]}}_{{pair[2]}}.txt", pair=incucyte_celltiterglo_correlation_pairs)
     conda:
         "env.yaml"
     output:
-        f"results/{path_incucyte}_{path_celltiterglo}/correlations_and_mapes_auc_{intermediate_inhibition_time}_{max_inhibition_time}.txt"
+        f"stats/{path_incucyte}_{path_celltiterglo}/correlations_and_mapes_auc_{intermediate_inhibition_time}_{max_inhibition_time}.txt"
     script:
         "scripts/scripts_stats/merge_txt_files.py"
