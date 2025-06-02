@@ -15,7 +15,7 @@ if not os.path.exists("../../visualization_figures"):
 
 colors = px.colors.qualitative.Plotly
 
-data = pd.read_csv("../../output/start_time6h/separate_files/LN229_Drug00.csv", index_col=0) # Only for getting the doses
+data = pd.read_csv("../../output/start_time6h/separate_files_3D/LN229_Drug00.csv", index_col=0) # Only for getting the doses
 doses = data["dose"].unique()
 xticks = 10**doses
 xticks = [f"{x:.3f}" for x in xticks]

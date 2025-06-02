@@ -12,6 +12,7 @@ if grayscale:
     color = "black"
 
 df = pd.read_csv(snakemake.input[0], index_col=0)
+df["time"] = df["time"]*24
 intermediate_inhibition_time = snakemake.config["intermediate_inhibition_time"]
 max_inhibition_time = snakemake.config["max_inhibition_time"]
 daily = snakemake.wildcards["daily"] == "True"

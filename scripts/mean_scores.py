@@ -28,7 +28,7 @@ if "/2D/" in snakemake.input[0]:
             score_string = mean_score(df_merged, time, metric)
             f.write(score_string)
 else:
-    max_inhibition_time = int(max(times)) # maximal inhibition time in IncuCyte data
+    max_inhibition_time = int(max(times)) # maximal inhibition time in Incucyte data
     daily = snakemake.config["daily"]
 
     with open(snakemake.output[0], "w") as f:

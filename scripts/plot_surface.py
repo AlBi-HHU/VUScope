@@ -16,9 +16,9 @@ for df in snakemake.input[1:]:
     dfs_to_merge.append(pd.read_csv(df, index_col=0))
 df_merged = pd.concat(dfs_to_merge).reset_index(drop=True)
 times = df_merged["time"].to_numpy()
-max_inhibition_time = int(max(times)) # maximal inhibition time in IncuCyte data
-start_time = snakemake.config["start_time"]
-extrapolate_until_time = snakemake.config["extrapolate_until_time"]
+max_inhibition_time = int(max(times)) # maximal inhibition time in Incucyte data
+start_time = snakemake.config["start_time"]/24
+extrapolate_until_time = snakemake.config["extrapolate_until_time"]/24
 
 # Determine maximum height (z-axis value) to use for all plots
 max_z = 0
@@ -40,18 +40,19 @@ for i in range(df_merged.shape[0]):
     best_params = np.array(df_merged.iloc[i, 6:-2])
     
     fig = go.Figure()
-    doses = separate_file_sample["dose"]
-    xticks = 10**doses
+    xticks = 10**separate_file_sample["dose"]
     xticks = [f"{x:.3f}" for x in xticks]
+    yticks = separate_file_sample["time"]*24
+    yticks = [f"{int(y)}" for y in yticks]
     
     # Draw data points
     max_time = extrapolate_until_time - start_time # Assuming extrapolate_until_time >= max_inhibition_time
     time_corrected = time
     if time == max_inhibition_time:
         time_corrected = time - start_time
-    mask = separate_file_sample["time"].isin(list(range(time_corrected + 1)))
+    mask = separate_file_sample["time"].isin(list(np.arange(int(time_corrected*24) + 1)/24))
     if daily:
-        mask = separate_file_sample["time"].isin(list(range(0, time_corrected + 1, 24)))
+        mask = separate_file_sample["time"].isin(list(np.arange(0, int(time_corrected*24) + 1, 24)/24))
     fig.add_trace(go.Scatter3d(
         x=separate_file_sample["dose"][mask],
         y=separate_file_sample["time"][mask],
@@ -111,15 +112,23 @@ for i in range(df_merged.shape[0]):
             zaxis_title="",
             xaxis=dict(
                 tickmode="array",
-                tickvals=doses,
+                tickvals=separate_file_sample["dose"],
                 ticktext=xticks,
                 zeroline=False
+            ),
+            yaxis=dict(
+                tickmode="array",
+                tickvals=np.arange(0, int(max_inhibition_time*24) + 1, 24)/24,
+                ticktext=np.arange(0, int(max_inhibition_time*24) + 1, 24),
+                range=[0, max_inhibition_time]
             ),
             zaxis=dict(
                 range=[0, max_z + 0.05],
                 tickvals=[""] + list(np.arange((max_z + 0.05) + 1))[1:],
                 autorange=False
             ),
+            aspectmode="manual",
+            aspectratio=dict(x=1, y=1, z=1),
         ),
         scene_camera={"eye": {"x": 1.8, "y": -1.8, "z": 0.5}},
     )

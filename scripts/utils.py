@@ -10,6 +10,18 @@ def dose_time_response_model(params, dt):
     d, t = dt
     return (2**(k_alpha*t) - 2**(k_delta*t))/(1 + 10**(k_beta*np.abs(2**(k_alpha*t) - 2**(k_delta*t))*(d - k_gamma))) + 2**(k_delta*t)
 
+def dose_time_response_model_vus(params, dt):
+    k_alpha, k_beta, k_gamma, k_delta = params
+    d, t = dt
+    
+    # To treat drug effects based on relative change in cell proliferation rates and not absolute change such that cell lines with high proliferation rate do not get better VUS values than those with low proliferation rate when the drug effect is the same
+    if k_alpha >= k_delta:
+        k_alpha, k_delta = 1, k_delta/k_alpha
+    else:
+        k_alpha, k_delta = k_alpha/k_delta, 1
+    
+    return (2**(k_alpha*t) - 2**(k_delta*t))/(1 + 10**(k_beta*np.abs(2**(k_alpha*t) - 2**(k_delta*t))*(d - k_gamma))) + 2**(k_delta*t)
+
 def dose_response_model(params, d):
     alpha, beta, gamma, delta = params
     return (alpha - delta)/(1 + 10**(beta*(d - gamma))) + delta

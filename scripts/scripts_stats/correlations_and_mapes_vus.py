@@ -124,6 +124,7 @@ def ccc_plot(x, y, x_title, y_title, normalized=False):
     return fig, ccc
 
 df = pd.read_csv(snakemake.input[0], index_col=0)
+df["time"] = df["time"]*24
 metric = "mape"
 time_x = int(snakemake.wildcards["time_x"])
 time_y = int(snakemake.wildcards["time_y"])

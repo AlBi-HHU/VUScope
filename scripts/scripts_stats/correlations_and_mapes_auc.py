@@ -121,6 +121,7 @@ def ccc_plot(x, y, x_title, y_title):
     return fig, ccc
 
 df_incucyte = pd.read_csv(snakemake.input[0], index_col=0)
+df_incucyte["time"] = df_incucyte["time"]*24
 df_celltiterglo = pd.read_csv(snakemake.input[1], index_col=0)
 max_inhibition_time = snakemake.config["max_inhibition_time"]
 metric = "mape"

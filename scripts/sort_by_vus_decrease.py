@@ -1,7 +1,7 @@
 import pandas as pd
 
 df_merged = pd.read_csv(snakemake.input[0], index_col=0)
-time = int(snakemake.wildcards["time"])
+time = int(snakemake.wildcards["time"])/24
 daily = snakemake.wildcards["daily"] == "True"
 df_surface_fit = df_merged[(df_merged["time"] == time) & (df_merged["daily"] == daily)].copy()
 

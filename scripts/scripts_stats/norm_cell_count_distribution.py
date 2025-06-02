@@ -12,7 +12,7 @@ if grayscale:
 # Distribution of all normalized cell counts to provide the context for metric values
 output_dir = snakemake.config["output_dir"]
 start_time_incucyte = snakemake.config["start_time_incucyte"]
-path = f"{output_dir}/start_time{start_time_incucyte}h/separate_files/"
+path = f"{output_dir}/start_time{start_time_incucyte}h/separate_files_3D/"
 
 separate_files = sorted(set(os.listdir(path)) - set([".snakemake_timestamp"]))
 dfs_to_merge = []

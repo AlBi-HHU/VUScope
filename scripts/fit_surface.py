@@ -8,9 +8,9 @@ doses = df["dose"].to_numpy()
 times = df["time"].to_numpy()
 norm_cell_counts = df["norm_cell_count"].to_numpy()
 metric = snakemake.config["metric"]
-start_time = int(snakemake.config["start_time"])
-time = int(snakemake.wildcards["time"])
-max_inhibition_time = int(max(times)) # maximal inhibition time in IncuCyte data (minus start_time)
+start_time = int(snakemake.config["start_time"])/24
+time = int(snakemake.wildcards["time"])/24
+max_inhibition_time = int(max(times))/24 # maximal inhibition time in Incucyte data (minus start_time)
 daily = snakemake.wildcards["daily"] == "True"
 input_parts = snakemake.input[0].split("/")[-1].split("_")
 cell_line = input_parts[0]
@@ -37,7 +37,7 @@ param_guesses = [
 ]
 
 bounds = (np.array([
-    [-np.inf, np.inf], # k_alpha
+    [0, np.inf], # k_alpha
     [0, np.inf], # k_beta
     [min_dose_bound, max_dose_bound], # k_gamma
     [-np.inf, np.inf]  # k_delta
@@ -47,7 +47,7 @@ if daily:
     time_corrected = time
     if time - start_time == max_inhibition_time:
         time_corrected = time - start_time
-    daily_times = list(range(0, time_corrected + 1, 24))
+    daily_times = list(np.arange(0, int(time_corrected*24) + 1, 24)/24)
     df_times = df[df["time"].isin(daily_times)] # Train only on datapoints at times = [0, 24, 48, ...]
 else:
     time_corrected = time

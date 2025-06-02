@@ -22,7 +22,8 @@ custom_colorscale = [
     [1.0, "grey"]
 ]
 
-separate_file_sample = pd.read_csv("../../output/start_time6h/separate_files/UW228-3_Drug11.csv", index_col=0)
+start_time = 6
+separate_file_sample = pd.read_csv("../../output/start_time6h/separate_files_3D/UW228-3_Drug11.csv", index_col=0)
 df_merged = pd.read_csv("../../output/start_time6h/3D/extrapolate_until_120h/tmp/fit_surface/UW228-3_Drug11_time72_dailyTrue.csv", index_col=0)
 df_merged2 = pd.read_csv("../../output/start_time6h/3D/extrapolate_until_120h/tmp/fit_surface/UW228-3_Drug11_time120_dailyTrue.csv", index_col=0)
 doses = separate_file_sample["dose"].unique()
@@ -37,9 +38,9 @@ dose_steps = np.linspace(min_dose, max_dose, len(separate_file_sample["dose"].un
 time_steps = np.linspace(0, max_time, len(separate_file_sample["time"].unique())*steps_surface + 1)
 norm_cell_count_steps = np.array([utils.dose_time_response_model(best_params, (dose_steps, t)) for t in time_steps])
 
-z_72h = utils.dose_time_response_model(best_params, (dose_steps, 72))
+z_72h = utils.dose_time_response_model(best_params, (dose_steps, 72/24))
 z_120h = utils.dose_time_response_model(best_params, (dose_steps, max_time))
-value_at_min_dose_and_72h = utils.dose_time_response_model(best_params, (min_dose, 72))
+value_at_min_dose_and_72h = utils.dose_time_response_model(best_params, (min_dose, 72/24))
 value_at_min_dose_and_120h = utils.dose_time_response_model(best_params, (min_dose, max_time))
 
 # Determine maximum height (z-axis value) to use for all plots
@@ -70,11 +71,19 @@ fig.update_layout(
             ticktext=xticks,
             zeroline=False
         ),
+        yaxis=dict(
+            tickmode="array",
+            tickvals=np.arange(0, int(max_time*24) + start_time + 1, 24)/24,
+            ticktext=np.arange(0, int(max_time*24) + start_time + 1, 24),
+            range=[0, max_time + start_time/24]
+        ),
         zaxis=dict(
             range=[0, max_z + 0.05],
             tickvals=[""] + list(np.arange((max_z + 0.05) + 1))[1:],
             autorange=False
-        )
+        ),
+        aspectmode="manual",
+        aspectratio=dict(x=1, y=1, z=1),
     ),
     scene_camera={"eye": {"x": 1.8, "y": -1.8, "z": .5}}
 )
@@ -220,11 +229,19 @@ fig.update_layout(
             ticktext=xticks,
             zeroline=False
         ),
+        yaxis=dict(
+            tickmode="array",
+            tickvals=np.arange(0, int(max_time*24) + start_time + 1, 24)/24,
+            ticktext=np.arange(0, int(max_time*24) + start_time + 1, 24),
+            range=[0, max_time + start_time/24]
+        ),
         zaxis=dict(
             range=[0, max_z + 0.05],
             tickvals=[""] + list(np.arange((max_z + 0.05) + 1))[1:],
             autorange=False
-        )
+        ),
+        aspectmode="manual",
+        aspectratio=dict(x=1, y=1, z=1),
     ),
     scene_camera={"eye": {"x": 1.8, "y": -1.8, "z": .5}}
 )
@@ -291,11 +308,19 @@ fig.update_layout(
             ticktext=xticks,
             zeroline=False
         ),
+        yaxis=dict(
+            tickmode="array",
+            tickvals=np.arange(0, int(max_time*24) + start_time + 1, 24)/24,
+            ticktext=np.arange(0, int(max_time*24) + start_time + 1, 24),
+            range=[0, max_time + start_time/24]
+        ),
         zaxis=dict(
             range=[0, max_z + 0.05],
             tickvals=[""] + list(np.arange((max_z + 0.05) + 1))[1:],
             autorange=False
-        )
+        ),
+        aspectmode="manual",
+        aspectratio=dict(x=1, y=1, z=1),
     ),
     scene_camera={"eye": {"x": 1.8, "y": -1.8, "z": .5}}
 )
@@ -614,11 +639,19 @@ fig.update_layout(
             ticktext=xticks,
             zeroline=False
         ),
+        yaxis=dict(
+            tickmode="array",
+            tickvals=np.arange(0, int(max_time*24) + start_time + 1, 24)/24,
+            ticktext=np.arange(0, int(max_time*24) + start_time + 1, 24),
+            range=[0, max_time + start_time/24]
+        ),
         zaxis=dict(
             range=[0, max_z + 0.05],
             tickvals=[""] + list(np.arange((max_z + 0.05) + 1))[1:],
             autorange=False
-        )
+        ),
+        aspectmode="manual",
+        aspectratio=dict(x=1, y=1, z=1),
     ),
     scene_camera={"eye": {"x": 1.8, "y": -1.8, "z": .5}}
 )

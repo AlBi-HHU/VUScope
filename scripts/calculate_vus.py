@@ -19,12 +19,12 @@ def calculate_num_vus(best_params, max_time, min_dose, max_dose, steps=100):
         ts = np.array([t, t + time_step, t, t + time_step])
         for d in dose_steps[:-1]:
             ds = np.array([d, d, d + dose_step, d + dose_step])
-            approx = utils.dose_time_response_model(best_params, (ds, ts))
+            approx = utils.dose_time_response_model_vus(best_params, (ds, ts))
             approx_above = np.max(approx)
             approx_below = np.min(approx)
             num_vus_above += approx_above*(time_step*dose_step)
             num_vus_below += approx_below*(time_step*dose_step)
-        approx_at_min_dose = utils.dose_time_response_model(best_params, (np.array([min_dose, min_dose]), np.array([t, t + time_step])))
+        approx_at_min_dose = utils.dose_time_response_model_vus(best_params, (np.array([min_dose, min_dose]), np.array([t, t + time_step])))
         approx_at_min_dose_above = np.max(approx_at_min_dose)
         approx_at_min_dose_below = np.min(approx_at_min_dose)
         num_auc_at_min_dose_above = approx_at_min_dose_above*time_step
@@ -43,9 +43,9 @@ for df in snakemake.input:
 df_merged = pd.concat(dfs_to_merge).reset_index(drop=True)
 times = sorted(df_merged["time"].unique())
 dailies = df_merged["daily"].unique()
-start_time = snakemake.config["start_time"]
+start_time = snakemake.config["start_time"]/24
 max_inhibition_time = int(max(times)) - start_time # Maximal inhibition time in IncuCyte data (minus start_time)
-extrapolate_until_time = snakemake.config["extrapolate_until_time"]
+extrapolate_until_time = snakemake.config["extrapolate_until_time"]/24
 
 dfs_surface_fit = []
 for i in times:
