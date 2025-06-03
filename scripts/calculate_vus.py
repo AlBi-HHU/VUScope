@@ -5,7 +5,7 @@ import utils
 
 def calculate_num_vus(best_params, max_time, min_dose, max_dose, steps=100):
     """
-    Calculates the volume under the surface numerically.
+    Calculates the volume under the surface numerically by averaging the approximation from above and below the surface.
     """
     dose_steps = np.linspace(min_dose, max_dose, steps + 1)
     time_steps = np.linspace(0, max_time, steps + 1)
