@@ -16,7 +16,7 @@ color = px.colors.qualitative.Plotly[0]
 if grayscale:
     color = "black"
 
-def pcc_plot(x, y, x_title, y_title, normalized=False):
+def pcc_plot(x, y, x_title, y_title):
     pcc, p = pearsonr(x, y)
     
     slope, intercept, _, _, _ = linregress(x, y)
@@ -41,7 +41,7 @@ def pcc_plot(x, y, x_title, y_title, normalized=False):
         ),
         xaxis=dict(
             title=dict(
-                text=("Normalized " if normalized else "") + f"VUS for {x_title}",
+                text=f"Normalized VUS for {x_title}",
                 font=dict(size=25)
             ),
             scaleanchor="y",
@@ -51,7 +51,7 @@ def pcc_plot(x, y, x_title, y_title, normalized=False):
         ),
         yaxis=dict(
             title=dict(
-                text=("Normalized " if normalized else "") + f"VUS for {y_title}",
+                text=f"Normalized VUS for {y_title}",
                 font=dict(size=25)
             ),
             tickfont=dict(size=20)
@@ -68,12 +68,10 @@ def pcc_plot(x, y, x_title, y_title, normalized=False):
     fig = go.Figure(data=[scatter, line], layout=layout)
     return fig, pcc
 
-def ccc_plot(x, y, x_title, y_title, normalized=False):
+def ccc_plot(x, y, x_title, y_title):
     ccc = utils.concordance_correlation_coefficient(x, y)
     
-    window_pad = 20
-    if normalized:
-        window_pad = 0.02
+    window_pad = 0.02
     minimum = min(x.min(), y.min()) - window_pad
     maximum = max(x.max(), y.max()) + window_pad
     
@@ -96,7 +94,7 @@ def ccc_plot(x, y, x_title, y_title, normalized=False):
         ),
         xaxis=dict(
             title=dict(
-                text=("Normalized " if normalized else "") + f"VUS for {x_title}",
+                text=f"Normalized VUS for {x_title}",
                 font=dict(size=25)
             ),
             scaleanchor="y",
@@ -106,7 +104,7 @@ def ccc_plot(x, y, x_title, y_title, normalized=False):
         ),
         yaxis=dict(
             title=dict(
-                text=("Normalized " if normalized else "") + f"VUS for {y_title}",
+                text=f"Normalized VUS for {y_title}",
                 font=dict(size=25)
             ),
             tickfont=dict(size=20)
@@ -140,22 +138,14 @@ if time_x < time_y:
 x_title = f"{time_x}h" + (f" (daily)" if daily_x else "")
 y_title = f"{time_y}h" + (f" (daily)" if daily_y else "")
 
-fig1, pcc = pcc_plot(df_x["vus" + extrapolated], df_y["vus"], f"{x_title} {extrapolated[1:]}", y_title)
-fig1.write_image(snakemake.output[0], scale=3)
-fig2, pcc_norm = pcc_plot(df_x["vus_norm" + extrapolated], df_y["vus_norm"], f"{x_title} {extrapolated[1:]}", y_title, normalized=True)
-fig2.write_image(snakemake.output[1], scale=3)
-fig3, ccc = ccc_plot(df_x["vus" + extrapolated], df_y["vus"], f"{x_title} {extrapolated[1:]}", y_title)
-fig3.write_image(snakemake.output[2], scale=3)
-fig4, ccc_norm = ccc_plot(df_x["vus_norm" + extrapolated], df_y["vus_norm"], f"{x_title} {extrapolated[1:]}", y_title, normalized=True)
-fig4.write_image(snakemake.output[3], scale=3)
+fig2, pcc_norm = pcc_plot(df_x["vus_norm" + extrapolated], df_y["vus_norm"], f"{x_title} {extrapolated[1:]}", y_title)
+fig2.write_image(snakemake.output[0], scale=3)
+fig4, ccc_norm = ccc_plot(df_x["vus_norm" + extrapolated], df_y["vus_norm"], f"{x_title} {extrapolated[1:]}", y_title)
+fig4.write_image(snakemake.output[1], scale=3)
 
-score = utils.scoring_function(df_x["vus" + extrapolated], df_y["vus"], metric)
 score_norm = utils.scoring_function(df_x["vus_norm" + extrapolated], df_y["vus_norm"], metric)
 
-with open(snakemake.output[4], "w") as f:
-    f.write(f"PCC of VUS for {x_title} {extrapolated[1:]} and {y_title}: {pcc}\n".replace("  ", " "))
-    f.write(f"CCC of VUS for {x_title} {extrapolated[1:]} and {y_title}: {ccc}\n".replace("  ", " "))
-    f.write(f"{metric.upper()} of VUS for {x_title} {extrapolated[1:]} and {y_title}: {score}\n".replace("  ", " "))
+with open(snakemake.output[2], "w") as f:
     f.write(f"PCC of normalized VUS for {x_title} {extrapolated[1:]} and {y_title}: {pcc_norm}\n".replace("  ", " "))
     f.write(f"CCC of normalized VUS for {x_title} {extrapolated[1:]} and {y_title}: {ccc_norm}\n".replace("  ", " "))
     f.write(f"{metric.upper()} of normalized VUS for {x_title} {extrapolated[1:]} and {y_title}: {score_norm}\n".replace("  ", " "))

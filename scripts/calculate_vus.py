@@ -5,7 +5,7 @@ import utils
 
 def calculate_num_vus(best_params, max_time, min_dose, max_dose, steps=100):
     """
-    Calculates the volume under the surface numerically by averaging the approximation from above and below the surface.
+    Calculates the volume under the surface numerically.
     """
     dose_steps = np.linspace(min_dose, max_dose, steps + 1)
     time_steps = np.linspace(0, max_time, steps + 1)
@@ -35,7 +35,7 @@ def calculate_num_vus(best_params, max_time, min_dose, max_dose, steps=100):
     vus = (num_vus_above + num_vus_below)/2
     vus_norm = vus/norm_factor
     
-    return vus, vus_norm
+    return vus_norm
 
 dfs_to_merge = []
 for df in snakemake.input:
@@ -59,11 +59,11 @@ for i in times:
         time = df_surface_fit.iloc[0, 4]
         if time > max_inhibition_time:
             time = max_inhibition_time
-        df_surface_fit["vus"], df_surface_fit["vus_norm"] = calculate_num_vus(best_params, time, min_dose, max_dose)
+        df_surface_fit["vus_norm"] = calculate_num_vus(best_params, time, min_dose, max_dose)
         
         # Calculate VUS of extrapolated surface until the value of extrapolate_until_time (minus start_time) in config.yaml
         max_time = extrapolate_until_time - start_time
-        df_surface_fit["vus_extrapolated"], df_surface_fit["vus_norm_extrapolated"] = calculate_num_vus(best_params, max_time, min_dose, max_dose)
+        df_surface_fit["vus_norm_extrapolated"] = calculate_num_vus(best_params, max_time, min_dose, max_dose)
 
         dfs_surface_fit.append(df_surface_fit)
 
