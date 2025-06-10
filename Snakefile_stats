@@ -28,9 +28,7 @@ rule all:
     input:
         f"stats/norm_cell_count_distribution.{image_file_ext}",
         expand(f"stats/{path_incucyte}/trend_plot_{intermediate_inhibition_time}_daily_{{daily}}_{max_inhibition_time}.{image_file_ext}", daily=daily),
-        expand(f"stats/{path_incucyte}/pcc_vus_{{pair[0][0]}}_daily_{{pair[0][1]}}_{{pair[1][0]}}_daily_{{pair[1][1]}}.{image_file_ext}", pair=incucyte_correlation_pairs),
         expand(f"stats/{path_incucyte}/pcc_norm_vus_{{pair[0][0]}}_daily_{{pair[0][1]}}_{{pair[1][0]}}_daily_{{pair[1][1]}}.{image_file_ext}", pair=incucyte_correlation_pairs),
-        expand(f"stats/{path_incucyte}/ccc_vus_{{pair[0][0]}}_daily_{{pair[0][1]}}_{{pair[1][0]}}_daily_{{pair[1][1]}}.{image_file_ext}", pair=incucyte_correlation_pairs),
         expand(f"stats/{path_incucyte}/ccc_norm_vus_{{pair[0][0]}}_daily_{{pair[0][1]}}_{{pair[1][0]}}_daily_{{pair[1][1]}}.{image_file_ext}", pair=incucyte_correlation_pairs),
         f"stats/{path_incucyte}/correlations_and_mapes_vus_{intermediate_inhibition_time}_{max_inhibition_time}.txt",
         expand(f"stats/{path_incucyte}_{path_celltiterglo}/pcc_norm_auc_incucyte_time_{{pair[0]}}_daily_{{pair[1]}}_celltiterglo_time_{{pair[2]}}.{image_file_ext}", pair=incucyte_celltiterglo_correlation_pairs),
@@ -61,9 +59,7 @@ rule correlations_and_mapes_vus:
     conda:
         "env.yaml"
     output:
-        f"stats/{path_incucyte}/pcc_vus_{{time_x}}_daily_{{daily_x}}_{{time_y}}_daily_{{daily_y}}.{image_file_ext}",
         f"stats/{path_incucyte}/pcc_norm_vus_{{time_x}}_daily_{{daily_x}}_{{time_y}}_daily_{{daily_y}}.{image_file_ext}",
-        f"stats/{path_incucyte}/ccc_vus_{{time_x}}_daily_{{daily_x}}_{{time_y}}_daily_{{daily_y}}.{image_file_ext}",
         f"stats/{path_incucyte}/ccc_norm_vus_{{time_x}}_daily_{{daily_x}}_{{time_y}}_daily_{{daily_y}}.{image_file_ext}",
         f"stats/{path_incucyte}/correlations_and_mapes_vus_{{time_x}}_daily_{{daily_x}}_{{time_y}}_daily_{{daily_y}}.txt"
     script:
