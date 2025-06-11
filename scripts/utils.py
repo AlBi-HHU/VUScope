@@ -17,7 +17,7 @@ def dose_time_response_model_vus(params, dt):
     # To treat drug effects based on relative change in cell proliferation rates and not absolute change such that cell lines with high proliferation rate do not get better VUS values than those with low proliferation rate when the drug effect is the same
     if k_alpha >= k_delta:
         k_alpha, k_delta = 1, k_delta/k_alpha
-    else:
+    else: # avoids numerical issues if both k_alpha and k_delta are between 0 and 1, and the relative change from k_alpha to k_delta is still the same
         k_alpha, k_delta = k_alpha/k_delta, 1
     
     return (2**(k_alpha*t) - 2**(k_delta*t))/(1 + 10**(k_beta*np.abs(2**(k_alpha*t) - 2**(k_delta*t))*(d - k_gamma))) + 2**(k_delta*t)

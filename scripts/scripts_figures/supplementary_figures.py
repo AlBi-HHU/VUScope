@@ -21,7 +21,7 @@ xticks = 10**doses
 xticks = [f"{x:.3f}" for x in xticks]
 a, b, c, d = 1, 1, -1.2, 0.3 # Randomly chosen values
 params = (a, b, c, d)
-x = np.linspace(-2.67, 1.2, 101)
+x = np.linspace(-2.67, 1.3, 101)
 y = utils.dose_response_model(params, x)
 x2 = np.linspace(-2.37, 1, 101)
 y2 = utils.dose_response_model(params, x2)
@@ -30,13 +30,17 @@ y2 = utils.dose_response_model(params, x2)
 fig = go.Figure()
 fig.update_layout(
     xaxis_title="Dose (" + u"\u03bc" + "M)",
-    yaxis_title="Normalized cell count",
-    xaxis = dict(
-        tickmode = "array",
-        tickvals = xticks,
-        ticktext = xticks
+    yaxis_title="Normalized cell viability",
+    xaxis=dict(
+        tickmode="array",
+        tickvals=xticks,
+        ticktext=xticks
     ),
     yaxis1=dict(range=[0, 1.05]),
+    width=800,
+    height=400,
+    margin=dict(l=0, r=0, t=0, b=0),
+    legend=dict(x=1.05, y=1)
 )
 fig.update_xaxes(type="log")
 
@@ -88,13 +92,17 @@ fig.write_image("../../visualization_figures/auc_norm_visualization.pdf", scale=
 fig = go.Figure()
 fig.update_layout(
     xaxis_title="Dose (" + u"\u03bc" + "M)",
-    yaxis_title="Normalized cell count",
-    xaxis = dict(
-        tickmode = "array",
-        tickvals = xticks,
-        ticktext = xticks
+    yaxis_title="Normalized cell viability",
+    xaxis=dict(
+        tickmode="array",
+        tickvals=xticks,
+        ticktext=xticks
     ),
+    width=800,
+    height=400,
     yaxis1=dict(range=[0, 1.05]),
+    margin=dict(l=0, r=0, t=0, b=0),
+    legend=dict(x=1.05, y=1)
 )
 fig.update_xaxes(type="log")
 
@@ -155,6 +163,14 @@ fig.add_trace(go.Scatter(
     name="Dose-response curve", 
     line=dict(color="black"), 
     mode="lines"
+))
+np.random.seed(0)
+fig.add_trace(go.Scatter(
+    x=10**doses,
+    y=[y + (np.random.random() - 0.5)/5 for y in utils.dose_response_model(params, doses)],
+    name="Measured cell viability",
+    marker=dict(symbol="x", size=10, color="black"),
+    mode="markers"
 ))
 
 fig.write_image("../../visualization_figures/4pl_visualization.pdf", scale=3)
