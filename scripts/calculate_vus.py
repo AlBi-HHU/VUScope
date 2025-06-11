@@ -19,12 +19,12 @@ def calculate_num_vus(best_params, max_time, min_dose, max_dose, steps=100):
         ts = np.array([t, t + time_step, t, t + time_step])
         for d in dose_steps[:-1]:
             ds = np.array([d, d, d + dose_step, d + dose_step])
-            approx = utils.dose_time_response_model_vus(best_params, (ds, ts))
+            approx = utils.dose_time_response_model_grivus(best_params, (ds, ts)) # remove "_grivus" for normal vus
             approx_above = np.max(approx)
             approx_below = np.min(approx)
             num_vus_above += approx_above*(time_step*dose_step)
             num_vus_below += approx_below*(time_step*dose_step)
-        approx_at_min_dose = utils.dose_time_response_model_vus(best_params, (np.array([min_dose, min_dose]), np.array([t, t + time_step])))
+        approx_at_min_dose = utils.dose_time_response_model_grivus(best_params, (np.array([min_dose, min_dose]), np.array([t, t + time_step]))) # remove "_grivus" for normal vus
         approx_at_min_dose_above = np.max(approx_at_min_dose)
         approx_at_min_dose_below = np.min(approx_at_min_dose)
         num_auc_at_min_dose_above = approx_at_min_dose_above*time_step

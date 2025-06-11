@@ -10,7 +10,7 @@ def dose_time_response_model(params, dt):
     d, t = dt
     return (2**(k_alpha*t) - 2**(k_delta*t))/(1 + 10**(k_beta*np.abs(2**(k_alpha*t) - 2**(k_delta*t))*(d - k_gamma))) + 2**(k_delta*t)
 
-def dose_time_response_model_vus(params, dt):
+def dose_time_response_model_grivus(params, dt):
     k_alpha, k_beta, k_gamma, k_delta = params
     d, t = dt
     
