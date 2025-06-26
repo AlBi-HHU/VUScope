@@ -15,7 +15,7 @@ if not os.path.exists("../../visualization_figures"):
 
 colors = px.colors.qualitative.Plotly
 
-data = pd.read_csv("../../output/start_time6h/separate_files_3D/LN229_Drug00.csv", index_col=0) # Only for getting the doses
+data = pd.read_csv("../../output/start_time6h/separate_files_3D/LN229_Drug00.csv", index_col=0) # Only for getting the concentrations
 doses = data["dose"].unique()
 xticks = 10**doses
 xticks = [f"{x:.3f}" for x in xticks]
@@ -29,7 +29,7 @@ y2 = utils.dose_response_model(params, x2)
 # AUC normalization
 fig = go.Figure()
 fig.update_layout(
-    xaxis_title="Dose (" + u"\u03bc" + "M)",
+    xaxis_title="Concentration (" + u"\u03bc" + "M)",
     yaxis_title="Normalized cell viability",
     xaxis=dict(
         tickmode="array",
@@ -65,7 +65,7 @@ fig.add_trace(go.Scatter(
 fig.add_trace(go.Scatter(
     x=[10**np.min(doses)]*2,
     y=[0, 1.05],
-    name="Minimum dose", 
+    name="Minimum concentration", 
     line=dict(color=colors[0]), 
     mode="lines"
 ))
@@ -73,7 +73,7 @@ fig.add_trace(go.Scatter(
 fig.add_trace(go.Scatter(
     x=[10**np.max(doses)]*2,
     y=[0, 1.05],
-    name="Maximum dose", 
+    name="Maximum concentration", 
     line=dict(color=colors[1]), 
     mode="lines"
 ))
@@ -81,7 +81,7 @@ fig.add_trace(go.Scatter(
 fig.add_trace(go.Scatter(
     x=[0, 10**np.max(x)],
     y=[y2[0], y2[0]],
-    name="Curve value at minimum dose", 
+    name="Curve value at minimum concentration", 
     line=dict(color=colors[2]), 
     mode="lines"
 ))
@@ -91,7 +91,7 @@ fig.write_image("../../visualization_figures/auc_norm_visualization.pdf", scale=
 # 4-parameter logistic curve
 fig = go.Figure()
 fig.update_layout(
-    xaxis_title="Dose (" + u"\u03bc" + "M)",
+    xaxis_title="Concentration (" + u"\u03bc" + "M)",
     yaxis_title="Normalized cell viability",
     xaxis=dict(
         tickmode="array",
@@ -105,6 +105,15 @@ fig.update_layout(
     legend=dict(x=1.05, y=1)
 )
 fig.update_xaxes(type="log")
+
+# Only used for forcing both plots to have the same plot area and legend width, legend text ("Curve value at minimum concentration") can be removed manually with another application
+fig.add_trace(go.Scatter(
+    x=[None],
+    y=[None],
+    mode="none",
+    showlegend=True,
+    name="Curve value at minimum concentration"
+))
 
 fig.add_trace(go.Scatter(
     x=[0, 10**np.max(x)],
@@ -164,10 +173,12 @@ fig.add_trace(go.Scatter(
     line=dict(color="black"), 
     mode="lines"
 ))
-np.random.seed(0)
+
+y = utils.dose_response_model(params, doses)
+y = [y[0] + 0.02, y[1] - 0.04, y[2] + 0.05, y[3] - 0.01, y[4] - 0.02, y[5] + 0.00]
 fig.add_trace(go.Scatter(
     x=10**doses,
-    y=[y + (np.random.random() - 0.5)/5 for y in utils.dose_response_model(params, doses)],
+    y=y,
     name="Measured cell viability",
     marker=dict(symbol="x", size=10, color="black"),
     mode="markers"

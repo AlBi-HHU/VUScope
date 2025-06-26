@@ -104,7 +104,7 @@ for i in range(df_merged.shape[0]):
     
     fig.update_layout(
         scene=dict(
-            #xaxis_title="Dose (" + u"\u03bc" + "M)",
+            #xaxis_title="Concentration (" + u"\u03bc" + "M)",
             #yaxis_title="Time (h)",
             #zaxis_title="Normalized cell count",
             xaxis_title="",

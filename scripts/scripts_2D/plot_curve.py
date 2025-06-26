@@ -65,7 +65,7 @@ fig.update_layout(
     ),
     xaxis=dict(
         title=dict(
-            text="Dose (" + u"\u03bc" + "M)",
+            text="Concentration (" + u"\u03bc" + "M)",
             font=dict(size=25)
         ),
         tickmode="array",

@@ -59,7 +59,7 @@ fig = go.Figure()
 
 fig.update_layout(
     scene=dict(
-        #xaxis_title="Dose (" + u"\u03bc" + "M)",
+        #xaxis_title="Concentration (" + u"\u03bc" + "M)",
         #yaxis_title="Time (h)",
         #zaxis_title="Normalized cell count",
         xaxis_title="",
@@ -217,7 +217,7 @@ for d in dose_steps_num_vus[:-1]:
     
 fig.update_layout(
     scene=dict(
-        #xaxis_title="Dose (" + u"\u03bc" + "M)",
+        #xaxis_title="Concentration (" + u"\u03bc" + "M)",
         #yaxis_title="Time (h)",
         #zaxis_title="Normalized cell count",
         xaxis_title="",
@@ -296,7 +296,7 @@ for d in dose_steps_num_vus[:-1]:
 
 fig.update_layout(
     scene=dict(
-        #xaxis_title="Dose (" + u"\u03bc" + "M)",
+        #xaxis_title="Concentration (" + u"\u03bc" + "M)",
         #yaxis_title="Time (h)",
         #zaxis_title="Normalized cell count",
         xaxis_title="",
@@ -338,8 +338,8 @@ fig = make_subplots(
     subplot_titles=("At 72h", None, "At 120h", None)
 )
 
-fig["layout"]["xaxis"]["title"] = "Dose (" + u"\u03bc" + "M)"
-fig["layout"]["xaxis2"]["title"] = "Dose (" + u"\u03bc" + "M)"
+fig["layout"]["xaxis"]["title"] = "Concentration (" + u"\u03bc" + "M)"
+fig["layout"]["xaxis2"]["title"] = "Concentration (" + u"\u03bc" + "M)"
 fig["layout"]["yaxis"]["title"] = "Normalized cell count"
 fig["layout"]["yaxis2"]["title"] = "Normalized cell count"
 
@@ -373,7 +373,7 @@ fig.add_trace(go.Scatter(
 fig.add_trace(go.Scatter(
     x=[min_dose, min_dose],
     y=[0, value_at_min_dose_and_72h],
-    name="Minimum dose",
+    name="Minimum concentration",
     mode="lines",
     line=dict(color=colors[0], width=3),
     showlegend=False
@@ -382,7 +382,7 @@ fig.add_trace(go.Scatter(
 fig.add_trace(go.Scatter(
     x=[max_dose, max_dose],
     y=[0, value_at_min_dose_and_72h],
-    name="Maximum dose",
+    name="Maximum concentration",
     mode="lines",
     line=dict(color=colors[1], width=3),
     showlegend=False
@@ -391,7 +391,7 @@ fig.add_trace(go.Scatter(
 fig.add_trace(go.Scatter(
     x=[min_dose, max_dose],
     y=[value_at_min_dose_and_72h, value_at_min_dose_and_72h],
-    name="Value at minimum dose at 72h",
+    name="Value at minimum concentration at 72h",
     mode="lines",
     line=dict(color=colors[7], width=3),
     showlegend=False
@@ -400,7 +400,7 @@ fig.add_trace(go.Scatter(
 fig.add_trace(go.Scatter(
     x=[min_dose, max_dose],
     y=[0, 0],
-    name="Maximum dose minus minimum dose",
+    name="Maximum concentration minus minimum concentration",
     mode="lines",
     line=dict(color=colors[5], width=3),
     showlegend=False
@@ -419,7 +419,7 @@ fig.add_trace(go.Scatter(
 fig.add_trace(go.Scatter(
     x=[min_dose, min_dose],
     y=[0, value_at_min_dose_and_120h],
-    name="Minimum dose",
+    name="Minimum concentration",
     mode="lines",
     line=dict(color=colors[0]),
     showlegend=False
@@ -428,7 +428,7 @@ fig.add_trace(go.Scatter(
 fig.add_trace(go.Scatter(
     x=[max_dose, max_dose],
     y=[0, value_at_min_dose_and_120h],
-    name="Maximum dose",
+    name="Maximum concentration",
     mode="lines",
     line=dict(color=colors[1]),
     showlegend=False
@@ -437,7 +437,7 @@ fig.add_trace(go.Scatter(
 fig.add_trace(go.Scatter(
     x=[min_dose, max_dose],
     y=[value_at_min_dose_and_120h, value_at_min_dose_and_120h],
-    name="Value at minimum dose at 120h",
+    name="Value at minimum concentration at 120h",
     mode="lines",
     line=dict(color=colors[2]),
     showlegend=False
@@ -446,7 +446,7 @@ fig.add_trace(go.Scatter(
 fig.add_trace(go.Scatter(
     x=[min_dose, max_dose],
     y=[0, 0],
-    name="Maximum dose minus minimum dose",
+    name="Maximum concentration minus minimum concentration",
     mode="lines",
     line=dict(color=colors[5]),
     showlegend=False
@@ -459,7 +459,7 @@ fig.update_layout(
 
 fig.update_layout(
     scene=dict(
-        #xaxis_title="Dose (" + u"\u03bc" + "M)",
+        #xaxis_title="Concentration (" + u"\u03bc" + "M)",
         #yaxis_title="Time (h)",
         #zaxis_title="Normalized cell count",
         xaxis_title="",
@@ -508,7 +508,7 @@ fig.add_trace(go.Scatter3d(
     z=[0, value_at_min_dose_and_120h],
     mode="lines",
     line=dict(color=colors[0], width=3),
-    name="Minimum dose"
+    name="Minimum concentration"
 ), row=1, col=2)
 
 fig.add_trace(go.Scatter3d(
@@ -526,7 +526,7 @@ fig.add_trace(go.Scatter3d(
     z=[0, value_at_min_dose_and_72h],
     mode="lines",
     line=dict(color=colors[1], width=3),
-    name="Maximum dose"
+    name="Maximum concentration"
 ), row=1, col=2)
 
 fig.add_trace(go.Scatter3d(
@@ -542,7 +542,7 @@ fig.add_trace(go.Scatter3d(
     x=[min_dose, max_dose],
     y=[72, 72],
     z=[0, 0],
-    name="Maximum dose minus minimum dose",
+    name="Maximum concentration minus minimum concentration",
     mode="lines",
     line=dict(color=colors[5], width=3)
 ), row=1, col=2)
@@ -551,7 +551,7 @@ fig.add_trace(go.Scatter3d(
     x=[min_dose, max_dose],
     y=[max_time, max_time],
     z=[0, 0],
-    name="Maximum dose minus minimum dose",
+    name="Maximum concentration minus minimum concentration",
     mode="lines",
     line=dict(color=colors[5], width=3),
     showlegend=False
@@ -627,7 +627,7 @@ fig.update_layout(
 
 fig.update_layout(
     scene=dict(
-        #xaxis_title="Dose (" + u"\u03bc" + "M)",
+        #xaxis_title="Concentration (" + u"\u03bc" + "M)",
         #yaxis_title="Time (h)",
         #zaxis_title="Normalized cell count",
         xaxis_title="",
