@@ -10,7 +10,7 @@ norm_cell_counts = df["norm_cell_count"].to_numpy()
 metric = snakemake.config["metric"]
 start_time = int(snakemake.config["start_time"])/24
 time = int(snakemake.wildcards["time"])/24
-max_inhibition_time = int(max(times))/24 # maximal inhibition time in Incucyte data (minus start_time)
+max_inhibition_time = max(times) # maximal inhibition time in Incucyte data (minus start_time)
 daily = snakemake.wildcards["daily"] == "True"
 input_parts = snakemake.input[0].split("/")[-1].split("_")
 cell_line = input_parts[0]
