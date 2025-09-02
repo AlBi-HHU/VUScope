@@ -11,6 +11,7 @@ start_time = config["start_time"]
 extrapolate_until_time = config["extrapolate_until_time"]
 times = config["times"]
 daily = config["daily"]
+sort_by_vus_decrease = config["sort_by_vus_decrease"]
 input_files = [f for f in os.listdir(data_dir) if not f.startswith(".")]
 
 def aggregate_fit_surface_results(wildcards):
@@ -26,7 +27,7 @@ def aggregate_plot_surface(wildcards):
 rule all:
     input:
         aggregate_plot_surface,
-        expand(f"{output_dir}/start_time{start_time}h/3D/extrapolate_until_{extrapolate_until_time}h/fit_surface_results_sorted_by_vus_decrease_after_{{time}}_daily_{{daily}}.csv", time=[t for t in times if t < extrapolate_until_time], daily=daily),
+        expand(f"{output_dir}/start_time{start_time}h/3D/extrapolate_until_{extrapolate_until_time}h/fit_surface_results_sorted_by_{{sort_by_vus_decrease}}_vus_decrease_after_{{time}}_daily_{{daily}}.csv", time=[t for t in times if t < extrapolate_until_time], daily=daily, sort_by_vus_decrease=sort_by_vus_decrease),
         f"{output_dir}/start_time{start_time}h/3D/extrapolate_until_{extrapolate_until_time}h/fit_surface_mean_scores.txt"
 
 # Preprocessing
@@ -44,6 +45,7 @@ checkpoint preprocessing:
 # 3D Surface Rules
 
 rule fit_surface:
+    priority: 3
     input:
         f"{output_dir}/start_time{start_time}h/separate_files_3D/{{sample}}.csv"
     conda:
@@ -54,6 +56,7 @@ rule fit_surface:
         "scripts/fit_surface.py"
 
 rule calculate_vus:
+    priority: 2
     input:
         expand(f"{output_dir}/start_time{start_time}h/3D/extrapolate_until_{extrapolate_until_time}h/tmp/fit_surface/{{sample}}_time{{time}}_daily{{daily}}.csv", time=times, allow_missing=True)
     conda:
@@ -64,6 +67,7 @@ rule calculate_vus:
         "scripts/calculate_vus.py"
 
 rule plot_surface:
+    priority: 1
     input:
         f"{output_dir}/start_time{start_time}h/separate_files_3D/{{sample}}.csv",
         expand(f"{output_dir}/start_time{start_time}h/3D/extrapolate_until_{extrapolate_until_time}h/tmp/fit_surface/{{sample}}_time{{time}}_daily{{daily}}.csv", time=times, daily=daily, allow_missing=True)
@@ -90,7 +94,7 @@ rule sort_by_vus_decrease:
     conda:
         "env.yaml"
     output:
-        f"{output_dir}/start_time{start_time}h/3D/extrapolate_until_{extrapolate_until_time}h/fit_surface_results_sorted_by_vus_decrease_after_{{time}}_daily_{{daily}}.csv"
+        f"{output_dir}/start_time{start_time}h/3D/extrapolate_until_{extrapolate_until_time}h/fit_surface_results_sorted_by_{{sort_by_vus_decrease}}_vus_decrease_after_{{time}}_daily_{{daily}}.csv"
     script:
         "scripts/sort_by_vus_decrease.py"
 

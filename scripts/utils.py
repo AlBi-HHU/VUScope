@@ -6,21 +6,30 @@ from scipy.stats import pearsonr
 
 # Models
 def dose_time_response_model(params, dt):
-    k_alpha, k_beta, k_gamma, k_delta = params
+    k_alpha, a_alpha, k_beta, k_gamma, k_delta, a_delta = params
     d, t = dt
-    return (2**(k_alpha*t) - 2**(k_delta*t))/(1 + 10**(k_beta*np.abs(2**(k_alpha*t) - 2**(k_delta*t))*(d - k_gamma))) + 2**(k_delta*t)
+    
+    alpha_t = (a_alpha*2**(k_alpha*t))/((a_alpha - 1) + 2**(k_alpha*t))
+    delta_t = (a_delta*2**(k_delta*t))/((a_delta - 1) + 2**(k_delta*t))
+    beta_t = k_beta*np.abs(alpha_t - delta_t)
+    gamma_t = k_gamma
+    
+    return (alpha_t - delta_t)/(1 + 10**(beta_t*(d - gamma_t))) + delta_t
 
 def dose_time_response_model_grivus(params, dt):
-    k_alpha, k_beta, k_gamma, k_delta = params
+    k_alpha, a_alpha, k_beta, k_gamma, k_delta, a_delta = params
     d, t = dt
     
-    # To treat drug effects based on relative change in cell proliferation rates and not absolute change such that cell lines with high proliferation rate do not get better VUS values than those with low proliferation rate when the drug effect is the same
-    if k_alpha >= k_delta:
+    if k_alpha > k_delta:
         k_alpha, k_delta = 1, k_delta/k_alpha
-    else: # avoids numerical issues if both k_alpha and k_delta are between 0 and 1, and the relative change from k_alpha to k_delta is still the same
+    else:
         k_alpha, k_delta = k_alpha/k_delta, 1
     
-    return (2**(k_alpha*t) - 2**(k_delta*t))/(1 + 10**(k_beta*np.abs(2**(k_alpha*t) - 2**(k_delta*t))*(d - k_gamma))) + 2**(k_delta*t)
+    alpha_t = (a_alpha*2**(k_alpha*t))/((a_alpha - 1) + 2**(k_alpha*t))
+    delta_t = (a_delta*2**(k_delta*t))/((a_delta - 1) + 2**(k_delta*t))
+    beta_t = k_beta*np.abs(alpha_t - delta_t)
+    gamma_t = k_gamma
+    return (alpha_t - delta_t)/(1 + 10**(beta_t*(d - gamma_t))) + delta_t
 
 def dose_response_model(params, d):
     alpha, beta, gamma, delta = params

@@ -2,3 +2,5 @@ output
 results
 visualization_figures
 */__pycache__
+stats*
+plots

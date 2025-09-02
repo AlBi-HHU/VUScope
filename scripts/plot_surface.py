@@ -16,7 +16,7 @@ for df in snakemake.input[1:]:
     dfs_to_merge.append(pd.read_csv(df, index_col=0))
 df_merged = pd.concat(dfs_to_merge).reset_index(drop=True)
 times = df_merged["time"].to_numpy()
-max_inhibition_time = int(max(times)) # maximal inhibition time in Incucyte data
+max_inhibition_time = max(times) # maximal inhibition time in Incucyte data
 start_time = snakemake.config["start_time"]/24
 extrapolate_until_time = snakemake.config["extrapolate_until_time"]/24
 
@@ -101,15 +101,15 @@ for i in range(df_merged.shape[0]):
             colorscale=colorscale2,
             showscale=False
         ))
-    
+
     fig.update_layout(
         scene=dict(
-            #xaxis_title="Concentration (" + u"\u03bc" + "M)",
-            #yaxis_title="Time (h)",
-            #zaxis_title="Normalized cell count",
-            xaxis_title="",
-            yaxis_title="",
-            zaxis_title="",
+            xaxis_title="Concentration (" + u"\u03bc" + "M)",
+            yaxis_title="Time (h)",
+            zaxis_title="Normalized<br> cell count",
+            #xaxis_title="",
+            #yaxis_title="",
+            #zaxis_title="",
             xaxis=dict(
                 tickmode="array",
                 tickvals=separate_file_sample["dose"],
@@ -130,7 +130,8 @@ for i in range(df_merged.shape[0]):
             aspectmode="manual",
             aspectratio=dict(x=1, y=1, z=1),
         ),
-        scene_camera={"eye": {"x": 1.8, "y": -1.8, "z": 0.5}},
+        scene_camera={"eye": {"x": 1.8, "y": -2.0, "z": 0.4}},
     )
     
     fig.write_image(snakemake.output[i], scale=3)
+        

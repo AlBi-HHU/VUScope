@@ -10,7 +10,7 @@ norm_cell_counts = df["norm_cell_count"].to_numpy()
 metric = snakemake.config["metric"]
 start_time = int(snakemake.config["start_time"])/24
 time = int(snakemake.wildcards["time"])/24
-max_inhibition_time = int(max(times))/24 # maximal inhibition time in Incucyte data (minus start_time)
+max_inhibition_time = max(times) # maximal inhibition time in Incucyte data (minus start_time)
 daily = snakemake.wildcards["daily"] == "True"
 input_parts = snakemake.input[0].split("/")[-1].split("_")
 cell_line = input_parts[0]
@@ -19,7 +19,7 @@ df_fit_surface_cols = [
     "cell_line", "drug",
     "min_dose", "max_dose",
     "time", "daily",
-    "k_alpha", "k_beta", "k_gamma", "k_delta",
+    "k_alpha", "a_alpha", "k_beta", "k_gamma", "k_delta", "a_delta",
     metric,
     f"{metric}_extrapolated_until_max_inhibition_time"
 ]
@@ -30,17 +30,21 @@ min_dose_bound = np.min(doses) - mean_dose_difference
 max_dose_bound = np.max(doses) + mean_dose_difference
 
 param_guesses = [
-    [1/24], # k_alpha
+    [1], # k_alpha # typical doubling time of in vitro cancer cells is about 1 day
+    [100], # a_alpha
     [0.1, 1, 10], # k_beta
     [np.min(doses), np.median(doses), np.max(doses)], # k_gamma
-    [1/24] # k_delta
+    [0.5], # k_delta
+    [10], # a_delta
 ]
 
 bounds = (np.array([
-    [0, np.inf], # k_alpha
+    [0, 2], # k_alpha # assuming that an in vitro cancer cell with growth-stimulating drugs has a doubling time of at most half a day
+    [0, np.inf], # a_alpha
     [0, np.inf], # k_beta
     [min_dose_bound, max_dose_bound], # k_gamma
-    [-np.inf, np.inf]  # k_delta
+    [0, 2], # k_delta # assuming that an in vitro cancer cell with growth-stimulating drugs has a doubling time of at most half a day
+    [0, np.inf], # a_delta
 ]).T)
 
 if daily:

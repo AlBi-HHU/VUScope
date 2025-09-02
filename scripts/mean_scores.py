@@ -20,7 +20,7 @@ def mean_score(df_merged, times, metric, daily=None, max_inhibition_time=None):
 df_merged = pd.read_csv(snakemake.input[0], index_col=0)
 output_dir = snakemake.config["output_dir"]
 metric = snakemake.config["metric"]
-times = snakemake.config["times"]
+times = np.array(snakemake.config["times"])/24
 
 if "/2D/" in snakemake.input[0]:
     with open(snakemake.output[0], "w") as f:
@@ -28,7 +28,7 @@ if "/2D/" in snakemake.input[0]:
             score_string = mean_score(df_merged, time, metric)
             f.write(score_string)
 else:
-    max_inhibition_time = int(max(times)) # maximal inhibition time in Incucyte data
+    max_inhibition_time = max(times) # maximal inhibition time in Incucyte data
     daily = snakemake.config["daily"]
 
     with open(snakemake.output[0], "w") as f:

@@ -79,7 +79,7 @@ df_merged = df_merged.rename(columns={
     "Dispensed concentration": "dose"
 })
 df_merged = df_merged[["cell_line", "drug", "dose", "time", "norm_cell_count"]]
-df_merged["time"] = df_merged["time"]/24 # to do calculations with days instead of hours to avoid 2^120 for example
+df_merged["time"] = df_merged["time"]/24
 df_merged = df_merged.sort_values(by=["cell_line", "drug", "dose", "time"])
 
 output_path = f"{output_dir}/start_time{start_time}h/separate_files_3D"

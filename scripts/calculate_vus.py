@@ -44,7 +44,7 @@ df_merged = pd.concat(dfs_to_merge).reset_index(drop=True)
 times = sorted(df_merged["time"].unique())
 dailies = df_merged["daily"].unique()
 start_time = snakemake.config["start_time"]/24
-max_inhibition_time = int(max(times)) - start_time # Maximal inhibition time in IncuCyte data (minus start_time)
+max_inhibition_time = max(times) - start_time # Maximal inhibition time in IncuCyte data (minus start_time)
 extrapolate_until_time = snakemake.config["extrapolate_until_time"]/24
 
 dfs_surface_fit = []
