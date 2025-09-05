@@ -24,10 +24,10 @@ df_fit_surface_cols = [
     f"{metric}_extrapolated_until_max_inhibition_time"
 ]
 
-dose_differences = np.diff(sorted(set(doses)))
-mean_dose_difference = np.mean(dose_differences) # Because differences between two consecutive doses are roughly the same in log space
-min_dose_bound = np.min(doses) - mean_dose_difference
-max_dose_bound = np.max(doses) + mean_dose_difference
+#dose_differences = np.diff(sorted(set(doses))) # only marginally improved results, left out for simplicity and similarity to AUC
+#mean_dose_difference = np.mean(dose_differences) # Because differences between two consecutive doses are roughly the same in log space
+min_dose_bound = np.min(doses) #- mean_dose_difference
+max_dose_bound = np.max(doses) #+ mean_dose_difference
 
 param_guesses = [
     [1], # k_alpha # typical doubling time of in vitro cancer cells is about 1 day
