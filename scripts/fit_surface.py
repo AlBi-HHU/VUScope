@@ -24,10 +24,10 @@ df_fit_surface_cols = [
     f"{metric}_extrapolated_until_max_inhibition_time"
 ]
 
-#dose_differences = np.diff(sorted(set(doses))) # only marginally improved results, left out for simplicity and similarity to AUC
+#dose_differences = np.diff(sorted(set(doses)))
 #mean_dose_difference = np.mean(dose_differences) # Because differences between two consecutive doses are roughly the same in log space
-min_dose_bound = np.min(doses) #- mean_dose_difference
-max_dose_bound = np.max(doses) #+ mean_dose_difference
+min_dose_bound = np.min(doses) #- mean_dose_difference # uncomment to marginally improve results, but not deemed necessary
+max_dose_bound = np.max(doses) #+ mean_dose_difference # uncomment to marginally improve results, but not deemed necessary
 
 param_guesses = [
     [1], # k_alpha # typical doubling time of in vitro cancer cells is about 1 day
@@ -62,15 +62,34 @@ doses_times = df_times["dose"].to_numpy()
 times_times = df_times["time"].to_numpy()
 norm_cell_counts_times = df_times["norm_cell_count"].to_numpy()
 
-best_params, score = utils.fit_model(
-    model_function=utils.dose_time_response_model,
-    residual_function=utils.residuals_dose_time_response_model,
-    param_guesses=param_guesses,
-    function_input=(doses_times, times_times),
-    function_output=norm_cell_counts_times,
-    metric=metric,
-    bounds=bounds
-)
+try:
+    best_params, score = utils.fit_model(
+        model_function=utils.dose_time_response_model,
+        residual_function=utils.residuals_dose_time_response_model,
+        param_guesses=param_guesses,
+        function_input=(doses_times, times_times),
+        function_output=norm_cell_counts_times,
+        metric=metric,
+        bounds=bounds
+    )
+except:
+    param_guesses = [
+        [1], # k_alpha # typical doubling time of in vitro cancer cells is about 1 day
+        [100], # a_alpha
+        [0.1, 1, 10], # k_beta
+        [np.min(doses) + 0.01, np.median(doses), np.max(doses) - 0.01], # k_gamma # sometimes, there is a numerical issue with the trf algorithm
+        [0.5], # k_delta
+        [10], # a_delta
+    ]
+    best_params, score = utils.fit_model(
+        model_function=utils.dose_time_response_model,
+        residual_function=utils.residuals_dose_time_response_model,
+        param_guesses=param_guesses,
+        function_input=(doses_times, times_times),
+        function_output=norm_cell_counts_times,
+        metric=metric,
+        bounds=bounds
+    )
 
 # Calculate score not only on datapoints each 24h, but every available datapoint until time
 if daily:
