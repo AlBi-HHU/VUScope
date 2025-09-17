@@ -3,7 +3,7 @@ protocol_dir: input/protocols # directory name with the protocol data
 output_dir: output # directory name where the output should be stored
 
 image_file_ext: pdf # file extension for plots, can be any file extension supported by plotly
-metric: rmse # can be any other metric, but must be implemented in the function "scoring_function(z, z_pred, metric)" in "scripts/utils.py"
+metric: mape # can be any other metric, but must be implemented in the function "scoring_function(z, z_pred, metric)" in "scripts/utils.py"; we chose mape because it is easy to interpret and treats early and later time points the same, rmse for example has arbitrary large values the more time passes and emphasizes later time points more
 
 start_time: 6 # remove all times that are less than start time, useful if cells have not scattered across the well immediately
 extrapolate_until_time: 120 # for any time in the list below named times, predict the results until this value here
@@ -11,4 +11,4 @@ extrapolate_until_time: 120 # for any time in the list below named times, predic
 times: [72, 120] # fit the data for datapoints up until each time in this list; any time greater than the maximal inhibition time is treated as the maximal inhibition time
 daily: [False, True] # whether to fit using all datapoints (False) or only datapoints in 24h-intervals
 
-sort_by_vus_decrease: [relative, absolute]
+sort_by_vus_decrease: [relative] # absolute or relative (GRI)VUS decrease
