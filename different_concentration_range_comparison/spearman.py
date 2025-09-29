@@ -7,8 +7,8 @@ def merge_files(df1, df2):
     df1["pair"] = df1["cell_line"] + "_" + df1["drug"]
     df2["pair"] = df2["cell_line"] + "_" + df2["drug"]
 
-    df1["rank1"] = df1.groupby("cell_line")
-    df2["rank2"] = df2.groupby("cell_line")
+    df1["rank1"] = df1.groupby("cell_line").cumcount()
+    df2["rank2"] = df2.groupby("cell_line").cumcount()
     
     merged = pd.merge(
         df1[["cell_line", "pair", "rank1"]],
