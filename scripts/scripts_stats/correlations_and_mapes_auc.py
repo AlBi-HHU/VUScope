@@ -70,6 +70,7 @@ def pcc_plot(x, y, x_title, y_title):
 
 def ccc_plot(x, y, x_title, y_title):
     ccc = utils.concordance_correlation_coefficient(x, y)
+    _, (lower, upper) = utils.bootstrap_ccc(x, y)
     window_pad = 0.02
     minimum = min(x.min(), y.min()) - window_pad
     maximum = max(x.max(), y.max()) + window_pad
@@ -88,7 +89,7 @@ def ccc_plot(x, y, x_title, y_title):
     )
     layout = go.Layout(
         title=dict(
-            text=f"Concordance Correlation Coefficient<br>(CCC = {ccc:.3f})",
+            text=f"Concordance Correlation Coefficient<br>(CCC = {ccc:.3f}, 95% CI: [{lower:.3f}, {upper:.3f}])",
             font=dict(size=30)
         ),
         xaxis=dict(

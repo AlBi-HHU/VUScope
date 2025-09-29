@@ -51,7 +51,7 @@ for input_file in snakemake.input:
     df_data["CellLine"] = cell_line
     
     # Read protocols
-    protocol_file = f"{protocol_dir}/{protocol_name}_tabular_detail_anonymized.xlsx" # for non-anonymized IncuCyte excel sheets, remove "_tabular_detail_anonymized"
+    protocol_file = f"{protocol_dir}/{protocol_name}_tabular_detail_anonymized.xlsx" # for non-anonymized Incucyte excel sheets, remove "_tabular_detail_anonymized"
     df_protocol = pd.read_excel(protocol_file)
     df_protocol.columns = [col.replace("\n", " ") for col in df_protocol.columns]
 
@@ -71,7 +71,7 @@ for input_file in snakemake.input:
     
     dfs_to_merge.append(df)
 
-# Save all samples (cell-line--drug--protocol triplets)
+# Save all samples (cell line-drug protocol triplets)
 df_merged = pd.concat(dfs_to_merge)
 df_merged = df_merged.rename(columns={
     "Fluid name": "drug",
@@ -81,6 +81,11 @@ df_merged = df_merged.rename(columns={
 df_merged = df_merged[["cell_line", "drug", "dose", "time", "norm_cell_count"]]
 df_merged["time"] = df_merged["time"]/24
 df_merged = df_merged.sort_values(by=["cell_line", "drug", "dose", "time"])
+
+#min_conc = np.nanmin(df_merged["dose"])
+#df_merged = df_merged[df_merged["dose"] != min_conc]
+#max_conc = np.nanmax(df_merged["dose"])
+#df_merged = df_merged[df_merged["dose"] != max_conc]
 
 output_path = f"{output_dir}/start_time{start_time}h/separate_files_3D"
 if not os.path.exists(output_path):
