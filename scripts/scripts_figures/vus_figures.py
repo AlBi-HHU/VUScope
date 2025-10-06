@@ -59,12 +59,12 @@ fig = go.Figure()
 
 fig.update_layout(
     scene=dict(
-        #xaxis_title="Concentration (" + u"\u03bc" + "M)",
-        #yaxis_title="Time (h)",
-        #zaxis_title="Normalized cell count",
-        xaxis_title="",
-        yaxis_title="",
-        zaxis_title="",
+        xaxis_title="Concentration (" + u"\u03bc" + "M)",
+        yaxis_title="Time (h)",
+        zaxis_title="Normalized<br> cell count",
+        #xaxis_title="",
+        #yaxis_title="",
+        #zaxis_title="",
         xaxis=dict(
             tickmode="array",
             tickvals=doses,
@@ -85,7 +85,7 @@ fig.update_layout(
         aspectmode="manual",
         aspectratio=dict(x=1, y=1, z=1),
     ),
-    scene_camera={"eye": {"x": 1.8, "y": -1.8, "z": .5}}
+    scene_camera={"eye": {"x": 1.8, "y": -2.0, "z": .4}}
 )
 
 fig.add_trace(go.Surface(
@@ -217,12 +217,12 @@ for d in dose_steps_num_vus[:-1]:
     
 fig.update_layout(
     scene=dict(
-        #xaxis_title="Concentration (" + u"\u03bc" + "M)",
-        #yaxis_title="Time (h)",
-        #zaxis_title="Normalized cell count",
-        xaxis_title="",
-        yaxis_title="",
-        zaxis_title="",
+        xaxis_title="Concentration (" + u"\u03bc" + "M)",
+        yaxis_title="Time (h)",
+        zaxis_title="Normalized<br> cell count",
+        #xaxis_title="",
+        #yaxis_title="",
+        #zaxis_title="",
         xaxis=dict(
             tickmode="array",
             tickvals=doses,
@@ -243,7 +243,7 @@ fig.update_layout(
         aspectmode="manual",
         aspectratio=dict(x=1, y=1, z=1),
     ),
-    scene_camera={"eye": {"x": 1.8, "y": -1.8, "z": .5}}
+    scene_camera={"eye": {"x": 1.8, "y": -2.0, "z": .4}}
 )
 
 fig.write_image("../../visualization_figures/numerical_vus_above.pdf", scale=3)
@@ -296,12 +296,12 @@ for d in dose_steps_num_vus[:-1]:
 
 fig.update_layout(
     scene=dict(
-        #xaxis_title="Concentration (" + u"\u03bc" + "M)",
-        #yaxis_title="Time (h)",
-        #zaxis_title="Normalized cell count",
-        xaxis_title="",
-        yaxis_title="",
-        zaxis_title="",
+        xaxis_title="Concentration (" + u"\u03bc" + "M)",
+        yaxis_title="Time (h)",
+        zaxis_title="Normalized<br> cell count",
+        #xaxis_title="",
+        #yaxis_title="",
+        #zaxis_title="",
         xaxis=dict(
             tickmode="array",
             tickvals=doses,
@@ -322,12 +322,72 @@ fig.update_layout(
         aspectmode="manual",
         aspectratio=dict(x=1, y=1, z=1),
     ),
-    scene_camera={"eye": {"x": 1.8, "y": -1.8, "z": .5}}
+    scene_camera={"eye": {"x": 1.8, "y": -2.0, "z": .4}}
 )
 
 fig.write_image("../../visualization_figures/numerical_vus_below.pdf", scale=3)
 
 # VUS normalization
+
+fig = go.Figure()
+
+fig.add_trace(go.Surface(
+    x=dose_steps,
+    y=time_steps,
+    z=norm_cell_count_steps,
+    name=f"{cell_line}<br>{drug}",
+    opacity=0.5,
+    colorscale=colorscale,
+    showscale=False
+)) #, row=1, col=2)
+
+dose_steps2 = np.array([min_dose, max_dose])
+norm_cell_count_steps2 = np.array([utils.dose_time_response_model(best_params, (np.array([min_dose, min_dose]), t)) for t in time_steps])
+fig.add_trace(go.Surface(
+    x=dose_steps2,
+    y=time_steps,
+    z=norm_cell_count_steps2,
+    name="Normalization",
+    opacity=0.5,
+    colorscale="greens",
+    showscale=False
+)) #, row=1, col=2)
+
+fig.update_layout(
+    scene=dict(
+        xaxis_title="Concentration (" + u"\u03bc" + "M)",
+        yaxis_title="Time (h)",
+        zaxis_title="Normalized<br> cell count",
+        #xaxis_title="",
+        #yaxis_title="",
+        #zaxis_title="",
+        xaxis=dict(
+            tickmode="array",
+            tickvals=doses,
+            ticktext=xticks,
+            zeroline=False
+        ),
+        yaxis=dict(
+            tickmode="array",
+            tickvals=np.arange(0, int(max_time*24) + start_time + 1, 24)/24,
+            ticktext=np.arange(0, int(max_time*24) + start_time + 1, 24),
+            range=[0, max_time + start_time/24]
+        ),
+        zaxis=dict(
+            range=[0, max_z + 0.05],
+            tickvals=[""] + list(np.arange((max_z + 0.05) + 1))[1:],
+            autorange=False
+        ),
+        aspectmode="manual",
+        aspectratio=dict(x=1, y=1, z=1),
+    ),
+    scene_camera={"eye": {"x": 1.8, "y": -2.0, "z": .4}}
+)
+
+fig.write_image("../../visualization_figures/vus_norm_visualization.pdf", scale=3)
+
+fig = go.Figure()
+
 """
 fig = make_subplots(
     rows=2, cols=3,
@@ -340,8 +400,8 @@ fig = make_subplots(
 
 fig["layout"]["xaxis"]["title"] = "Concentration (" + u"\u03bc" + "M)"
 fig["layout"]["xaxis2"]["title"] = "Concentration (" + u"\u03bc" + "M)"
-fig["layout"]["yaxis"]["title"] = "Normalized cell count"
-fig["layout"]["yaxis2"]["title"] = "Normalized cell count"
+fig["layout"]["yaxis"]["title"] = "Normalized<br> cell count"
+fig["layout"]["yaxis2"]["title"] = "Normalized<br> cell count"
 
 fig.update_layout(
     xaxis=dict(
@@ -459,12 +519,12 @@ fig.update_layout(
 
 fig.update_layout(
     scene=dict(
-        #xaxis_title="Concentration (" + u"\u03bc" + "M)",
-        #yaxis_title="Time (h)",
-        #zaxis_title="Normalized cell count",
-        xaxis_title="",
-        yaxis_title="",
-        zaxis_title="",
+        xaxis_title="Concentration (" + u"\u03bc" + "M)",
+        yaxis_title="Time (h)",
+        zaxis_title="Normalized<br> cell count",
+        #xaxis_title="",
+        #yaxis_title="",
+        #zaxis_title="",
         xaxis=dict(
             tickmode="array",
             tickvals=doses,
@@ -477,21 +537,19 @@ fig.update_layout(
             autorange=False
         )
     ),
-    scene_camera={"eye": {"x": 1.8, "y": -1.8, "z": .5}}
+    scene_camera={"eye": {"x": 1.8, "y": -2.0, "z": .4}}
 )
 """
 
-fig = go.Figure()
-# Right
-"""
 fig.add_trace(go.Scatter3d(
     x=dose_steps,
-    y=np.array([72]*101),
+    y=np.array([72/24]*101),
     z=z_72h,
     mode="lines",
-    line=dict(color="grey", width=3),
-    name="Dose-response curve at 72h"
-), row=1, col=2)
+    line=dict(color="black", width=3),
+    name="Dose-response curve at 72h",
+	showlegend=False,
+)) #, row=1, col=2)
 
 fig.add_trace(go.Scatter3d(
     x=dose_steps,
@@ -499,8 +557,9 @@ fig.add_trace(go.Scatter3d(
     z=z_120h,
     mode="lines",
     line=dict(color="black", width=3),
-    name="Dose-response curve at 120h"
-), row=1, col=2)
+    name="Dose-response curve at 120h",
+	showlegend=False,
+)) #, row=1, col=2)
 
 fig.add_trace(go.Scatter3d(
     x=[min_dose, min_dose],
@@ -508,26 +567,28 @@ fig.add_trace(go.Scatter3d(
     z=[0, value_at_min_dose_and_120h],
     mode="lines",
     line=dict(color=colors[0], width=3),
-    name="Minimum concentration"
-), row=1, col=2)
+    name="Minimum concentration",
+	showlegend=False,
+)) #, row=1, col=2)
 
 fig.add_trace(go.Scatter3d(
     x=[min_dose, min_dose],
-    y=[72, 72],
+    y=[72/24, 72/24],
     z=[0, value_at_min_dose_and_72h],
     mode="lines",
     line=dict(color=colors[0], width=3),
-    showlegend=False
-), row=1, col=2)
+    showlegend=False,
+)) #, row=1, col=2)
 
 fig.add_trace(go.Scatter3d(
     x=[max_dose, max_dose],
-    y=[72, 72],
+    y=[72/24, 72/24],
     z=[0, value_at_min_dose_and_72h],
     mode="lines",
     line=dict(color=colors[1], width=3),
-    name="Maximum concentration"
-), row=1, col=2)
+    name="Maximum concentration",
+	showlegend=False,
+)) #, row=1, col=2)
 
 fig.add_trace(go.Scatter3d(
     x=[max_dose, max_dose],
@@ -535,17 +596,18 @@ fig.add_trace(go.Scatter3d(
     z=[0, value_at_min_dose_and_120h],
     mode="lines",
     line=dict(color=colors[1], width=3),
-    showlegend=False
-), row=1, col=2)
+    showlegend=False,
+)) #, row=1, col=2)
 
 fig.add_trace(go.Scatter3d(
     x=[min_dose, max_dose],
-    y=[72, 72],
+    y=[72/24, 72/24],
     z=[0, 0],
     name="Maximum concentration minus minimum concentration",
     mode="lines",
-    line=dict(color=colors[5], width=3)
-), row=1, col=2)
+    line=dict(color="grey", width=3),
+	showlegend=False,
+)) #, row=1, col=2)
 
 fig.add_trace(go.Scatter3d(
     x=[min_dose, max_dose],
@@ -553,18 +615,19 @@ fig.add_trace(go.Scatter3d(
     z=[0, 0],
     name="Maximum concentration minus minimum concentration",
     mode="lines",
-    line=dict(color=colors[5], width=3),
-    showlegend=False
-), row=1, col=2)
+    line=dict(color="grey", width=3),
+    showlegend=False,
+)) #, row=1, col=2)
 
 fig.add_trace(go.Scatter3d(
     x=[min_dose, max_dose],
-    y=[72, 72],
+    y=[72/24, 72/24],
     z=[value_at_min_dose_and_72h, value_at_min_dose_and_72h],
     mode="lines",
-    line=dict(color=colors[7], width=3),
-    name="Value at minimum dose at 72h"
-), row=1, col=2)
+    line=dict(color=colors[2], width=3),
+    name="Value at minimum dose at 72h",
+	showlegend=False,
+)) #, row=1, col=2)
 
 fig.add_trace(go.Scatter3d(
     x=[min_dose, max_dose],
@@ -572,8 +635,9 @@ fig.add_trace(go.Scatter3d(
     z=[value_at_min_dose_and_120h, value_at_min_dose_and_120h],
     mode="lines",
     line=dict(color=colors[2], width=3),
-    name="Value at minimum dose at 120h"
-), row=1, col=2)
+    name="Value at minimum dose at 120h",
+	showlegend=False,
+)) #, row=1, col=2)
 
 t = np.linspace(0, max_time, 101)
 z2 = utils.dose_time_response_model(best_params, (min_dose, t))
@@ -582,10 +646,11 @@ fig.add_trace(go.Scatter3d(
     y=t,
     z=z2,
     mode="lines",
-    line=dict(color=colors[4], width=3),
-    name="Time-response curve at min dose"
-), row=1, col=2)
-"""
+    line=dict(color=colors[0], width=3),
+    name="Time-response curve at min dose",
+	showlegend=False,
+)) #, row=1, col=2)
+
 fig.add_trace(go.Surface(
     x=dose_steps,
     y=time_steps,
@@ -596,43 +661,14 @@ fig.add_trace(go.Surface(
     showscale=False
 )) #, row=1, col=2)
 
-dose_steps2 = np.array([min_dose, max_dose])
-norm_cell_count_steps2 = np.array([utils.dose_time_response_model(best_params, (np.array([min_dose, min_dose]), t)) for t in time_steps])
-fig.add_trace(go.Surface(
-    x=dose_steps2,
-    y=time_steps,
-    z=norm_cell_count_steps2,
-    name="Normalization",
-    opacity=0.5,
-    colorscale="greens",
-    showscale=False
-)) #, row=1, col=2)
-
-"""
-fig.update_layout(
-    legend=dict(
-        yanchor="top",
-        y=1,
-        xanchor="right",
-        x=0.8
-    ),
-    scene=dict(
-        domain=dict(
-            x=[0.2, 1],
-            y=[0, 0.9]
-        )
-    )
-)
-"""
-
 fig.update_layout(
     scene=dict(
-        #xaxis_title="Concentration (" + u"\u03bc" + "M)",
-        #yaxis_title="Time (h)",
-        #zaxis_title="Normalized cell count",
-        xaxis_title="",
-        yaxis_title="",
-        zaxis_title="",
+        xaxis_title="Concentration (" + u"\u03bc" + "M)",
+        yaxis_title="Time (h)",
+        zaxis_title="Normalized<br> cell count",
+        #xaxis_title="",
+        #yaxis_title="",
+        #zaxis_title="",
         xaxis=dict(
             tickmode="array",
             tickvals=doses,
@@ -653,7 +689,38 @@ fig.update_layout(
         aspectmode="manual",
         aspectratio=dict(x=1, y=1, z=1),
     ),
-    scene_camera={"eye": {"x": 1.8, "y": -1.8, "z": .5}}
+    scene_camera={"eye": {"x": 1.8, "y": -2.0, "z": .4}}
 )
 
-fig.write_image("../../visualization_figures/vus_norm_visualization.pdf", scale=3)
+fig.write_image("../../visualization_figures/vus_norm_visualization_aucs.pdf", scale=3)
+
+dose_steps2 = np.array([min_dose, max_dose])
+norm_cell_count_steps2 = np.array([utils.dose_time_response_model(best_params, (np.array([min_dose, min_dose]), t)) for t in time_steps])
+fig.add_trace(go.Surface(
+    x=dose_steps2,
+    y=time_steps,
+    z=norm_cell_count_steps2,
+    name="Normalization",
+    opacity=0.5,
+    colorscale="greens",
+    showscale=False
+)) #, row=1, col=2)
+
+fig.write_image("../../visualization_figures/vus_norm_visualization_aucs_with_green_surface.pdf", scale=3)
+
+"""
+fig.update_layout(
+    legend=dict(
+        yanchor="top",
+        y=1,
+        xanchor="right",
+        x=0.8
+    ),
+    scene=dict(
+        domain=dict(
+            x=[0.2, 1],
+            y=[0, 0.9]
+        )
+    )
+)
+"""
