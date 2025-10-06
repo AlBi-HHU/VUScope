@@ -25,7 +25,7 @@ traces = []
 for (_, row1), (_, row2) in zip(df_max_inhibition_time.iterrows(), df_intermediate_inhibition_time.iterrows()):
     if (row1["cell_line"], row1["drug"]) == (row2["cell_line"], row2["drug"]):
         traces.append(go.Scatter(
-            x=[f"Normalized GRIVUS<br>for {max_inhibition_time}h", f"Normalized GRIVUS<br>for {intermediate_inhibition_time}h" + (" (daily)" if daily else "")],
+            x=[f"GRIVUS<br>for {max_inhibition_time}h", f"GRIVUS<br>for {intermediate_inhibition_time}h" + (" (daily)" if daily else "")],
             y=[row1["vus_norm"], row2["vus_norm"]],
             mode="lines",
             line=dict(color="black", width=1),
@@ -35,7 +35,7 @@ for (_, row1), (_, row2) in zip(df_max_inhibition_time.iterrows(), df_intermedia
 # Connect points between middle and right
 for (_, row) in df_intermediate_inhibition_time.iterrows():
     traces.append(go.Scatter(
-        x=[f"Normalized GRIVUS<br>for {intermediate_inhibition_time}h" + (" (daily)" if daily else ""), f"Normalized GRIVUS<br>extrapolated<br>until {max_inhibition_time}h" + (" (daily)" if daily else "")],
+        x=[f"GRIVUS<br>for {intermediate_inhibition_time}h" + (" (daily)" if daily else ""), f"GRIVUS<br>extrapolated<br>until {max_inhibition_time}h" + (" (daily)" if daily else "")],
         y=[row["vus_norm"], row["vus_norm_extrapolated"]],
         mode="lines",
         line=dict(color="black", width=1),
@@ -44,7 +44,7 @@ for (_, row) in df_intermediate_inhibition_time.iterrows():
 
 # left
 traces.append(go.Scatter(
-    x=[f"Normalized GRIVUS<br>for {max_inhibition_time}h"]*len(df_max_inhibition_time["vus_norm"]),
+    x=[f"GRIVUS<br>for {max_inhibition_time}h"]*len(df_max_inhibition_time["vus_norm"]),
     y=df_max_inhibition_time["vus_norm"],
     mode="markers",
     marker=dict(color=color),
@@ -52,7 +52,7 @@ traces.append(go.Scatter(
 
 # middle
 traces.append(go.Scatter(
-    x=[f"Normalized GRIVUS<br>for {intermediate_inhibition_time}h" + (" (daily)" if daily else "")]*len(df_intermediate_inhibition_time["vus_norm"]),
+    x=[f"GRIVUS<br>for {intermediate_inhibition_time}h" + (" (daily)" if daily else "")]*len(df_intermediate_inhibition_time["vus_norm"]),
     y=df_intermediate_inhibition_time["vus_norm"],
     mode="markers",
     marker=dict(color=color),
@@ -60,7 +60,7 @@ traces.append(go.Scatter(
 
 # right
 traces.append(go.Scatter(
-    x=[f"Normalized GRIVUS<br>extrapolated<br>until {max_inhibition_time}h" + (" (daily)" if daily else "")]*len(df_intermediate_inhibition_time["vus_norm_extrapolated"]),
+    x=[f"GRIVUS<br>extrapolated<br>until {max_inhibition_time}h" + (" (daily)" if daily else "")]*len(df_intermediate_inhibition_time["vus_norm_extrapolated"]),
     y=df_intermediate_inhibition_time["vus_norm_extrapolated"],
     mode="markers",
     marker=dict(color=color),
@@ -71,7 +71,7 @@ layout = go.Layout(
         tickangle=45,
         zeroline=False
     ),
-    yaxis=dict(title="Normalized GRIVUS"),
+    yaxis=dict(title="GRIVUS"),
     width=400,
     height=700,
     showlegend=False

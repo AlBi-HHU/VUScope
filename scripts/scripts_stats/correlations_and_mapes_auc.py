@@ -41,7 +41,7 @@ def pcc_plot(x, y, x_title, y_title):
         ),
         xaxis=dict(
             title=dict(
-                text=f"Normalized GRIVUS for {x_title}",
+                text=f"GRIVUS for {x_title}",
                 font=dict(size=25)
             ),
             scaleanchor="y",
@@ -51,7 +51,7 @@ def pcc_plot(x, y, x_title, y_title):
         ),
         yaxis=dict(
             title=dict(
-                text=f"Normalized AUC for {y_title}",
+                text=f"AUC for {y_title}",
                 font=dict(size=25)
             ),
             tickfont=dict(size=20)
@@ -94,7 +94,7 @@ def ccc_plot(x, y, x_title, y_title):
         ),
         xaxis=dict(
             title=dict(
-                text=f"Normalized GRIVUS for {x_title}",
+                text=f"GRIVUS for {x_title}",
                 font=dict(size=25)
             ),
             scaleanchor="y",
@@ -104,7 +104,7 @@ def ccc_plot(x, y, x_title, y_title):
         ),
         yaxis=dict(
             title=dict(
-                text=f"Normalized AUC for {y_title}",
+                text=f"AUC for {y_title}",
                 font=dict(size=25)
             ),
             tickfont=dict(size=20)
@@ -147,6 +147,6 @@ fig.write_image(snakemake.output[1], scale=3)
 score = utils.scoring_function(df_x["vus_norm" + extrapolated], df_y["auc_norm"], metric)
 
 with open(snakemake.output[2], "w") as f:
-    f.write(f"PCC of normalized GRIVUS for {x_title} {extrapolated[1:]} and AUC for {y_title}: {pcc}\n".replace("  ", " "))
-    f.write(f"CCC of normalized GRIVUS for {x_title} {extrapolated[1:]} and AUC for {y_title}: {ccc}\n".replace("  ", " "))
-    f.write(f"{metric.upper()} of normalized GRIVUS for {x_title} {extrapolated[1:]} and AUC for {y_title}: {score}\n".replace("  ", " "))
+    f.write(f"PCC of GRIVUS for {x_title} {extrapolated[1:]} and AUC for {y_title}: {pcc}\n".replace("  ", " "))
+    f.write(f"CCC of GRIVUS for {x_title} {extrapolated[1:]} and AUC for {y_title}: {ccc}\n".replace("  ", " "))
+    f.write(f"{metric.upper()} of GRIVUS for {x_title} {extrapolated[1:]} and AUC for {y_title}: {score}\n".replace("  ", " "))
