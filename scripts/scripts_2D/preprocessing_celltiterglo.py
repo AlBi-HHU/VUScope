@@ -31,6 +31,11 @@ for (cell_line, drug), df_subset in df_merged.groupby(["cell_line", "drug"]):
         df_merged.loc[idx, "norm_cell_count"] = df["norm_cell_count"]/df["norm_cell_count"].iloc[0]
         df_merged.loc[idx, "dose"] = np.log10(df["dose"])
 
+#min_conc = np.nanmin(df_merged["dose"])
+#df_merged = df_merged[df_merged["dose"] != min_conc]
+#max_conc = np.nanmax(df_merged["dose"])
+#df_merged = df_merged[df_merged["dose"] != max_conc]
+
 output_path = f"{output_dir}/start_time{start_time}h/separate_files_2D"
 if not os.path.exists(output_path):
     os.makedirs(output_path)
