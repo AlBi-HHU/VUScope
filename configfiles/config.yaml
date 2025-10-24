@@ -8,7 +8,7 @@ metric: mape # can be any other metric, but must be implemented in the function 
 start_time: 6 # remove all times that are less than start time, useful if cells have not scattered across the well immediately
 extrapolate_until_time: 120 # for any time in the list below named times, predict the results until this value here
 
-times: [72, 120] # fit the data for datapoints up until each time in this list; any time greater than the maximal inhibition time is treated as the maximal inhibition time
+times: [48, 72, 120] # fit the data for datapoints up until each time in this list; any time greater than the maximal inhibition time is treated as the maximal inhibition time
 daily: [False, True] # whether to fit using all datapoints (False) or only datapoints in 24h-intervals
 
 sort_by_vus_decrease: [relative] # absolute or relative (GRI)VUS decrease

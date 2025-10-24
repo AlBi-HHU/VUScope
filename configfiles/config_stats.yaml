@@ -11,3 +11,5 @@ max_inhibition_time: 120 # the maximal inhibition time
 daily: [False, True] # whether to get result files for output that was fit using all datapoints (False) or only datapoints in 24h-intervals
 
 grayscale: True # True: gray plots without background, False: colored plots with background
+
+celltiterglo_comparison: true

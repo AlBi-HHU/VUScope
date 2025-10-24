@@ -15,8 +15,8 @@ def mean_score(df_merged, times, metric, daily=None, max_inhibition_time=None):
         std = df_merged[(df_merged["time"] == time) & (df_merged["daily"] == d)][metric].std()
         score_string = f"Mean {metric.upper()} from surface to datapoints for {time}h" + (" (daily)" if d else "") + ": " + str(mean_score) + " " + u"\u00B1" + " " + str(std) + "\n"
         if time < max_inhibition_time:
-            mean_score_extrapolated_until_max_inhibition_time = df_merged[df_merged["daily"] == d][f"{metric}_extrapolated_until_max_inhibition_time"].mean()
-            std_extrapolated_until_max_inhibition_time = df_merged[df_merged["daily"] == d][f"{metric}_extrapolated_until_max_inhibition_time"].std()
+            mean_score_extrapolated_until_max_inhibition_time = df_merged[(df_merged["time"] == time) & (df_merged["daily"] == d)][f"{metric}_extrapolated_until_max_inhibition_time"].mean()
+            std_extrapolated_until_max_inhibition_time = df_merged[(df_merged["time"] == time) & (df_merged["daily"] == d)][f"{metric}_extrapolated_until_max_inhibition_time"].std()
             score_string += f"Mean {metric.upper()} from surface to datapoints for {time}h" + (" (daily)" if d else "") + f" extrapolated until {max_inhibition_time}h: " + str(mean_score_extrapolated_until_max_inhibition_time) + " " + u"\u00B1" + " " + str(std_extrapolated_until_max_inhibition_time) + "\n"
     return score_string
 
