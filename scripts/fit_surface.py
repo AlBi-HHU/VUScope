@@ -102,9 +102,13 @@ if daily:
 
 # Calculate score between extrapolated function and data points until maximal inhibition time (minus start_time)
 score_extrapolated = None
-if time_corrected < max_inhibition_time:
-    surface_extrapolated = utils.dose_time_response_model(best_params, (doses, times))
-    score_extrapolated = utils.scoring_function(norm_cell_counts, surface_extrapolated, metric)
+if time_corrected < max_inhibition_time and extrapolate_until_time <= max_inhibition_time:
+    mask = times <= extrapolate_until_time
+    doses_extrapolated_until_time = doses[mask]
+    times_extrapolated_until_time = times[mask]
+    norm_cell_counts_extrapolated_until_time = norm_cell_counts[mask]
+    surface_extrapolated_until_time = utils.dose_time_response_model(best_params, (doses_extrapolated_until_time, times_extrapolated_until_time))
+    score_extrapolated = utils.scoring_function(norm_cell_counts_extrapolated_until_time, surface_extrapolated_until_time, metric)
 
 df_fit_surface = pd.DataFrame([[
     cell_line, drug,
