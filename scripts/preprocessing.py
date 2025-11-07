@@ -82,10 +82,12 @@ df_merged = df_merged[["cell_line", "drug", "dose", "time", "norm_cell_count"]]
 df_merged["time"] = df_merged["time"]/24
 df_merged = df_merged.sort_values(by=["cell_line", "drug", "dose", "time"])
 
-#min_conc = np.nanmin(df_merged["dose"])
-#df_merged = df_merged[df_merged["dose"] != min_conc]
-#max_conc = np.nanmax(df_merged["dose"])
-#df_merged = df_merged[df_merged["dose"] != max_conc]
+"""max_conc = np.nanmax(df_merged["dose"])
+min_conc = np.nanmin(df_merged["dose"])
+df_merged = df_merged[df_merged["dose"] != max_conc]
+df_merged = df_merged[df_merged["dose"] != min_conc]"""
+conc = np.array(sorted(set(df_merged["dose"].dropna())))[[0,2,4,5]]
+df_merged = df_merged[df_merged["dose"].isin(conc)]
 
 output_path = f"{output_dir}/start_time{start_time}h/separate_files_3D"
 if not os.path.exists(output_path):

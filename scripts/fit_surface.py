@@ -11,6 +11,7 @@ metric = snakemake.config["metric"]
 start_time = int(snakemake.config["start_time"])/24
 time = int(snakemake.wildcards["time"])/24
 max_inhibition_time = max(times) # maximal inhibition time in Incucyte data (minus start_time)
+extrapolate_until_time = snakemake.config["extrapolate_until_time"] - start_time
 daily = snakemake.wildcards["daily"] == "True"
 input_parts = snakemake.input[0].split("/")[-1].split("_")
 cell_line = input_parts[0]
@@ -62,34 +63,15 @@ doses_times = df_times["dose"].to_numpy()
 times_times = df_times["time"].to_numpy()
 norm_cell_counts_times = df_times["norm_cell_count"].to_numpy()
 
-try:
-    best_params, score = utils.fit_model(
-        model_function=utils.dose_time_response_model,
-        residual_function=utils.residuals_dose_time_response_model,
-        param_guesses=param_guesses,
-        function_input=(doses_times, times_times),
-        function_output=norm_cell_counts_times,
-        metric=metric,
-        bounds=bounds
-    )
-except:
-    param_guesses = [
-        [1], # k_alpha # typical doubling time of in vitro cancer cells is about 1 day
-        [100], # a_alpha
-        [0.1, 1, 10], # k_beta
-        [np.min(doses) + 0.01, np.median(doses), np.max(doses) - 0.01], # k_gamma # sometimes, there is a numerical issue with the trf algorithm
-        [0.5], # k_delta
-        [10], # a_delta
-    ]
-    best_params, score = utils.fit_model(
-        model_function=utils.dose_time_response_model,
-        residual_function=utils.residuals_dose_time_response_model,
-        param_guesses=param_guesses,
-        function_input=(doses_times, times_times),
-        function_output=norm_cell_counts_times,
-        metric=metric,
-        bounds=bounds
-    )
+best_params, score = utils.fit_model(
+    model_function=utils.dose_time_response_model,
+    residual_function=utils.residuals_dose_time_response_model,
+    param_guesses=param_guesses,
+    function_input=(doses_times, times_times),
+    function_output=norm_cell_counts_times,
+    metric=metric,
+    bounds=bounds
+)
 
 # Calculate score not only on datapoints each 24h, but every available datapoint until time
 if daily:
