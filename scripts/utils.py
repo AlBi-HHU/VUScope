@@ -69,13 +69,42 @@ def concordance_correlation_coefficient(z, z_pred):
     ccc = (2*pearson_correlation_coefficient*std_true*std_pred)/(std_true**2 + std_pred**2 + (mean_true - mean_pred)**2)
     return ccc
 
+# Bootstrap confidence interval for CCC
+def bootstrap_ccc(y_true, y_pred, n_boot=100, alpha=0.05, random_state=None):
+    y_true = np.array(y_true)
+    y_pred = np.array(y_pred)
+    
+    rng = np.random.default_rng(random_state)
+    n = len(y_true)
+    boot_stats = []
+    
+    for _ in range(n_boot):
+        idx = rng.integers(0, n, n)
+        boot_y_true = y_true[idx]
+        boot_y_pred = y_pred[idx]
+        boot_stats.append(concordance_correlation_coefficient(boot_y_true, boot_y_pred))
+
+    lower = np.percentile(boot_stats, 100 * alpha/2)
+    upper = np.percentile(boot_stats, 100 * (1 - alpha/2))
+    return np.mean(boot_stats), (lower, upper)
+
+# For scipy's least_squares: if trf algorithm throws an error, stick with last found solution
+last_x = None
+def callback(x, *args):
+    global last_x
+    last_x = x.copy()
+
 # Fitting
 def fit_model(model_function, residual_function, param_guesses, function_input, function_output, bounds, metric):
     best_score = np.inf
     best_params = [np.nan]*len(param_guesses)
     for guess in itertools.product(*param_guesses):
-        result = least_squares(residual_function, guess, args=(function_input, function_output), bounds=bounds)
-        params = result["x"]
+        try:
+            result = least_squares(residual_function, guess, args=(function_input, function_output), bounds=bounds, callback=callback)
+            params = result["x"]
+        except ValueError:
+            # Use last_x as best-guess fallback
+            params = guess if last_x is None else last_x
         score = scoring_function(model_function(params, function_input), function_output, metric)
         if best_score > score:
             best_score = score
