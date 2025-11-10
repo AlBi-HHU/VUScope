@@ -48,7 +48,7 @@ protocol_dir: input/protocols # directory name with the protocol data
 output_dir: output # directory name where the output should be stored
 
 image_file_ext: pdf # file extension for plots, can be any file extension supported by plotly
-metric: rmse # can be any other metric, but must be implemented in the function "scoring_function(z, z_pred, metric)" in "scripts/utils.py"
+metric: mape # can be any other metric, but must be implemented in the function "scoring_function(z, z_pred, metric)" in "scripts/utils.py"; we chose mape because it is easy to interpret and treats early and later time points the same, rmse for example has arbitrary large values the more time passes and emphasizes later time points more
 
 start_time: 6 # remove all times that are less than start time, useful if cells have not scattered across the well immediately
 extrapolate_until_time: 120 # for any time in the list below named times, predict the results until this value here
@@ -63,7 +63,7 @@ data_dir: input/data_celltiterglo # directory name with the traditional high-thr
 output_dir: output # directory name where the output should be stored
 
 image_file_ext: pdf # file extension for plots, can be any file extension supported by plotly
-metric: rmse # can be any other metric, but must be implemented in the function "scoring_function(z, z_pred, metric)" in "scripts/utils.py"
+metric: mape # can be any other metric, but must be implemented in the function "scoring_function(z, z_pred, metric)" in "scripts/utils.py"; we chose mape because it is easy to interpret and treats early and later time points the same, rmse for example has arbitrary large values the more time passes and emphasizes later time points more
 
 start_time: 0 # can be ignored, only necessary for using the same scripts of the main 3D workflow
 extrapolate_until_time: 120 # for any time in the list below named times, predict the results until this value here
@@ -86,6 +86,8 @@ max_inhibition_time: 120 # the maximal inhibition time
 daily: [False, True] # whether to get result files for output that was fit using all datapoints (False) or only datapoints in 24h-intervals
 
 grayscale: True # True: gray plots without background, False: colored plots with background
+
+celltiterglo_comparison: true
 ```
 
 ## Documentation
