@@ -3,6 +3,7 @@ This repository contains the Snakemake pipelines for "VUScope: a mathematical mo
 
 ## Installation
 - Clone/Download this repository (if you are new to Git, click the green "<> Code" button).
+- Install Python. (We used version 3.11.)
 - Install Miniconda.
 - Follow the instructions on the [Snakemake installation guide](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html) to install a Snakemake environment in conda. (We used Snakemake version 7.25.0. The versions of the packages are listed in env.yaml.)
 
