@@ -99,7 +99,6 @@ Main 3D workflow:
 - `calculate_vus.py`: Calculates the VUS by averaging the numerical VUS approximation above and below the surface.
 - `plot_surface.py`: Plots the dose-time-response surface.
 - `merge_files.py`: Merges files that were separate for each cell line, drug, and time into one.
-- `sort_by_vus_decrease.py`: Sorts the results table such that the most promising drugs that show a stronger effect with more incubation time are at the top of the table.
 - `mean_scores.py`: Shows the metric of the fit specified in the configuration file.
 
 2D workflow:
